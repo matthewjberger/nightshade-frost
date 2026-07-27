@@ -1,5 +1,6 @@
 *.exe
 *.o
+*.s
 nightshade_c.dll
 nightshade_c.dll.lib
 libnightshade_c.so

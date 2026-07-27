@@ -52,11 +52,11 @@ just all         # all four, in order
 
 `compiler` picks which compiler builds the Frost. It defaults to `frost`, the
 bootstrap compiler written in Rust. `just compiler=frostc all` builds the same
-sources with the self-hosted one.
+sources with the self-hosted one, and both produce a game that runs.
 
-Requires `frost` on PATH, a Rust toolchain for the engine side, and a checkout
-of nightshade beside this one. Point the `nightshade` variable at it if it lives
-somewhere else.
+Requires the compiler you name on PATH, a Rust toolchain for the engine side,
+and a checkout of nightshade beside this one. Point the `nightshade` variable at
+it if it lives somewhere else.
 
 ## The game
 
