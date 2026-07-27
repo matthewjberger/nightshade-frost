@@ -14,8 +14,10 @@ import "format.frost"
 import "vec.frost"
 
 TOTAL :: 12
-PICKUP :: 2.56
 FLOOR :: 18.0
+
+// The pickup radius, squared, so the test against it needs no square root.
+PICKUP_SQUARED :: 2.56
 
 Coin :: struct {
     entity: Entity,
@@ -82,10 +84,9 @@ build_yard :: fn(app: App) {
     mut index : i64 = 0
     while (index < 4) {
         x, z := pillar_spot(index)
-        pillar := spawn_object(app, SHAPE_CUBE, x, 1.5, z, 1.0, 3.0, 1.0,
+        spawn_object(app, SHAPE_CUBE, x, 1.5, z, 1.0, 3.0, 1.0,
             0.35, 0.33, 0.4, 1.0,
             Body { tag = BODY_STATIC, dynamic_mass = 0.0 })
-        set_color(app, pillar, 0.35, 0.33, 0.4, 1.0)
         index = index + 1
     }
 
@@ -147,7 +148,7 @@ main :: fn() -> i64 {
                 rotate(app, coin.entity, 0.0, 1.0, 0.0, step * 1.8)
                 dx := eye.x - coin.x
                 dz := eye.z - coin.z
-                if (dx * dx + dz * dz < PICKUP) {
+                if (dx * dx + dz * dz < PICKUP_SQUARED) {
                     coin.alive = false
                     despawn(app, coin.entity)
                     emit_burst(app, coin.x, 1.1, coin.z,

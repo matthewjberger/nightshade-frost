@@ -1,3 +1,5 @@
+set windows-shell := ["powershell.exe", "-NoProfile", "-Command"]
+
 nightshade := "../nightshade"
 
 # Which compiler builds the Frost. `frost` is the bootstrap compiler written in
@@ -10,6 +12,12 @@ default:
     @just --list
 
 # Regenerates nightshade.json, the command surface the bindings are built from.
+# Windows redirection writes utf-16, so the bytes are written rather than piped.
+[windows]
+manifest:
+    [IO.File]::WriteAllLines("$PWD/nightshade.json", (cargo run -q --manifest-path {{nightshade}}/crates/nightshade-api/Cargo.toml --example dump_manifest))
+
+[unix]
 manifest:
     cargo run -q --manifest-path {{nightshade}}/crates/nightshade-api/Cargo.toml --example dump_manifest > nightshade.json
 
@@ -26,9 +34,15 @@ dll:
     cp {{nightshade}}/crates/nightshade-api/bindings/c/target/release/libnightshade_c.so .
 
 # Regenerates nightshade.frost from nightshade.json.
+[windows]
 bindgen:
     {{compiler}} --link -o nightshade_bindgen.exe nightshade_bindgen.frost
     ./nightshade_bindgen.exe
+
+[unix]
+bindgen:
+    {{compiler}} --link -o nightshade_bindgen nightshade_bindgen.frost
+    ./nightshade_bindgen
 
 # Builds and runs the game.
 [windows]

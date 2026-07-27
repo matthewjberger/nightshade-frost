@@ -6,7 +6,7 @@
 // what C's uintptr_t is on the targets this builds for and what slice_len
 // answers with.
 
-export App, Entity, Vec3, Text, Entities, Strings, Bytes, CStrings, open, frame, close, c_string, c_strings, c_strings_free, null_of, text_from, entities_from, entities_free, bytes_from, bytes_free, strings_from, strings_at, strings_free, SHAPE_CUBE, SHAPE_SPHERE, SHAPE_CYLINDER, SHAPE_CONE, SHAPE_TORUS, SHAPE_PLANE, Body, BODY_NONE, BODY_STATIC, BODY_DYNAMIC, Background, BACKGROUND_SKY, BACKGROUND_CLOUDY_SKY, BACKGROUND_SPACE, BACKGROUND_NEBULA, BACKGROUND_SUNSET, BACKGROUND_COLOR, BACKGROUND_HDR, SCREEN_ANCHOR_TOP_LEFT, SCREEN_ANCHOR_TOP_CENTER, SCREEN_ANCHOR_TOP_RIGHT, SCREEN_ANCHOR_BOTTOM_LEFT, SCREEN_ANCHOR_BOTTOM_CENTER, SCREEN_ANCHOR_BOTTOM_RIGHT, SCREEN_ANCHOR_CENTER, TEXT_ALIGNMENT_LEFT, TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_RIGHT, AUDIO_BUS_MASTER, AUDIO_BUS_MUSIC, AUDIO_BUS_SFX, AUDIO_BUS_AMBIENT, AUDIO_BUS_VOICE, AUDIO_BUS_UI, InstanceWire, EmitterWire, RecastConfigWire, spawn_cube, spawn_sphere, spawn_cylinder, spawn_cone, spawn_plane, spawn_torus, spawn_floor, spawn_group, spawn_model, spawn_custom_mesh, register_prefab, spawn_prefab_named, spawn_object, set_color, set_metallic_roughness, set_emissive, set_unlit, set_texture, set_texture_tiling, set_normal_texture, set_metallic_roughness_texture, set_emissive_texture, set_occlusion_texture, set_position, set_scale, set_rotation, rotate, position, set_parent, set_visible, despawn, tag, untag, has_tag, query_tagged, point_light, spot_light, set_sun, set_background, show_grid, set_ambient, set_clear_color, set_bloom, set_bloom_intensity, set_ssao, set_ssr, set_ssgi, set_taa, set_exposure, set_color_grading, set_time_of_day, set_time_scale, time_scale, pause, unpause, set_paused, is_paused, emit_fire, emit_smoke, emit_burst, draw_cube, draw_sphere, draw_cylinder, draw_cone, draw_torus, draw_line, draw_text3d, spawn_label, spawn_text, set_text, set_text_color, set_text_size, spawn_panel, panel_label, panel_button, button_clicked, button_hovered, despawn_panel, panel_row, panel_grid, panel_scroll, set_scroll_offset, set_focus_order, focus_widget, spawn_panel_at, panel_text, panel_box, panel_button_at, set_panel_rect, set_panel_color, set_panel_text, set_panel_text_color, set_panel_selected, set_panel_visible, play_animation, play_animation_named, set_animation_looping, set_animation_speed, blend_to_animation, pause_animation, resume_animation, stop_animation, animation_clips, add_animation_event, add_animation_event_named, set_animation_layer_weight, clear_animation_layers, aim_at, orbit_camera, fly_camera, fixed_camera, look_at, set_orbit_focus, set_orbit_view, set_orbit_zoom, set_orbit_modifier, set_field_of_view, set_orthographic, set_perspective, camera_position, camera_forward, first_person, delta_time, elapsed_seconds, key_down, key_pressed, mouse_down, mouse_clicked, wasd, pointer_over_ui, mouse_scroll, mouse_delta, touch_count, touches, gamepad_button_down, gamepad_button_pressed, gamepad_axis, gamepad_left_stick, gamepad_right_stick, gamepad_connected, push, set_velocity, apply_force, apply_torque, set_angular_velocity, velocity, angular_velocity, make_sensor, overlap_sphere, set_collision_groups, set_friction, set_restitution, set_linear_damping, set_angular_damping, set_mass, set_gravity_scale, bake_navmesh, spawn_walker, walk_to, set_walk_speed, stop_walking, clicked_entity, entity_under_cursor, cursor_on_ground, spawn_world_panel, world_panel_button, world_panel_label, world_button_clicked, pause_sound, resume_sound, fade_volume, crossfade, set_bus_volume, duck_voice, directional_light, area_light, set_light_shadows, emit_sparks, emit_firework, emit_particles, set_alpha_blend, set_alpha_cutoff, set_double_sided, set_ior, set_transmission, set_clearcoat, set_anisotropy, set_uv_transform, set_sheen, set_iridescence, set_specular, set_normal_scale, set_occlusion_strength, set_emissive_strength, set_thickness, set_text_outline, set_morph_weight, set_window_title, lock_cursor, request_exit, set_render_layer, set_camera_layers, third_person_camera, spawn_cloth, reset_cloth, set_wind, pause_cutscene, resume_cutscene, stop_cutscene, seek_cutscene, set_cutscene_camera, bind_cutscene_actor, spawn_cylinder_body, spawn_capsule_body, set_controller_speed, set_controller_jump, is_grounded, load_texture, load_texture_linear, register_texture, list_materials, material, register_material, update_material, set_material_variant, spawn_objects, spawn_instanced, spawn_instanced_with_material, set_instances, spawn_cloth_sheet, blend_to_animation_named, add_animation_layer, name_entity, name, set_entity_name, children, descendants, roots, scene_tree, material_of, color, metallic_roughness, emissive, unlit, texture, describe_entity, set_text_alignment, set_morph_weights, morph_weight, morph_target_count, set_fog, set_fog_mode, set_depth_of_field, screenshot, set_shading_mode, animate_position, animate_scale, animate_color, shake_camera, reach_to, bounds, bounds_of, frame_entities, spawn_particle_emitter, set_emitter, spawn_decal, save_scene, load_scene, window_size, cursor_locked, frames_per_second, frame_count, uptime_milliseconds, bake_navmesh_with, raycast, attach_fixed, attach_hinge, attach_spring, attach_rope, controller_velocity, move_character, request_surface_pick, take_surface_pick, world_button_hovered, load_sound, play_sound, play_sound_looping, play_sound_at, set_volume, stop_sound, set_pitch, set_spatial_distance, panel_checkbox, checkbox_value, panel_slider, slider_value, set_slider_value, panel_text_input, text_input_changed, panel_dropdown, dropdown_selected, panel_progress_bar, set_progress, panel_toggle, toggle_value, panel_radio, radio_selected, panel_range_slider, set_range, panel_tabs, set_tab, panel_collapsing, panel_color_picker, color_value, panel_text_area, panel_text_area_with_value, set_text_area, panel_multi_select, set_multi_select, panel_date_picker, set_date, panel_menu, panel_color_picker_hsv, panel_splitter, panel_breadcrumb, panel_virtual_list, panel_table, panel_data_grid, set_data_grid_rows, set_data_grid_cell, data_grid_selection_changed, panel_command_palette, panel_property_grid, panel_property_row, panel_tree_view, tree_content, tree_node, tree_node_children, set_tree_node_expanded, tree_view_selected, panel_drag_value, drag_value, panel_selectable, panel_modal, panel_spinner, panel_separator, panel_heading, save_scene_to_file, load_scene_from_file, text_free
+export App, Entity, Vec3, Text, Entities, Strings, Bytes, CStrings, open, frame, close, c_string, c_strings, c_strings_free, cstr_len, null_of, text_from, entities_from, entities_free, bytes_from, bytes_free, strings_from, strings_at, strings_free, SHAPE_CUBE, SHAPE_SPHERE, SHAPE_CYLINDER, SHAPE_CONE, SHAPE_TORUS, SHAPE_PLANE, Body, BODY_NONE, BODY_STATIC, BODY_DYNAMIC, Background, BACKGROUND_SKY, BACKGROUND_CLOUDY_SKY, BACKGROUND_SPACE, BACKGROUND_NEBULA, BACKGROUND_SUNSET, BACKGROUND_COLOR, BACKGROUND_HDR, SCREEN_ANCHOR_TOP_LEFT, SCREEN_ANCHOR_TOP_CENTER, SCREEN_ANCHOR_TOP_RIGHT, SCREEN_ANCHOR_BOTTOM_LEFT, SCREEN_ANCHOR_BOTTOM_CENTER, SCREEN_ANCHOR_BOTTOM_RIGHT, SCREEN_ANCHOR_CENTER, TEXT_ALIGNMENT_LEFT, TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_RIGHT, AUDIO_BUS_MASTER, AUDIO_BUS_MUSIC, AUDIO_BUS_SFX, AUDIO_BUS_AMBIENT, AUDIO_BUS_VOICE, AUDIO_BUS_UI, InstanceWire, EmitterWire, RecastConfigWire, spawn_cube, spawn_sphere, spawn_cylinder, spawn_cone, spawn_plane, spawn_torus, spawn_floor, spawn_group, spawn_model, spawn_custom_mesh, register_prefab, spawn_prefab_named, spawn_object, set_color, set_metallic_roughness, set_emissive, set_unlit, set_texture, set_texture_tiling, set_normal_texture, set_metallic_roughness_texture, set_emissive_texture, set_occlusion_texture, set_position, set_scale, set_rotation, rotate, position, set_parent, set_visible, despawn, tag, untag, has_tag, query_tagged, point_light, spot_light, set_sun, set_background, show_grid, set_ambient, set_clear_color, set_bloom, set_bloom_intensity, set_ssao, set_ssr, set_ssgi, set_taa, set_exposure, set_color_grading, set_time_of_day, set_time_scale, time_scale, pause, unpause, set_paused, is_paused, emit_fire, emit_smoke, emit_burst, draw_cube, draw_sphere, draw_cylinder, draw_cone, draw_torus, draw_line, draw_text3d, spawn_label, spawn_text, set_text, set_text_color, set_text_size, spawn_panel, panel_label, panel_button, button_clicked, button_hovered, despawn_panel, panel_row, panel_grid, panel_scroll, set_scroll_offset, set_focus_order, focus_widget, spawn_panel_at, panel_text, panel_box, panel_button_at, set_panel_rect, set_panel_color, set_panel_text, set_panel_text_color, set_panel_selected, set_panel_visible, play_animation, play_animation_named, set_animation_looping, set_animation_speed, blend_to_animation, pause_animation, resume_animation, stop_animation, animation_clips, add_animation_event, add_animation_event_named, set_animation_layer_weight, clear_animation_layers, aim_at, orbit_camera, fly_camera, fixed_camera, look_at, set_orbit_focus, set_orbit_view, set_orbit_zoom, set_orbit_modifier, set_field_of_view, set_orthographic, set_perspective, camera_position, camera_forward, first_person, delta_time, elapsed_seconds, key_down, key_pressed, mouse_down, mouse_clicked, wasd, pointer_over_ui, mouse_scroll, mouse_delta, touch_count, touches, gamepad_button_down, gamepad_button_pressed, gamepad_axis, gamepad_left_stick, gamepad_right_stick, gamepad_connected, push, set_velocity, apply_force, apply_torque, set_angular_velocity, velocity, angular_velocity, make_sensor, overlap_sphere, set_collision_groups, set_friction, set_restitution, set_linear_damping, set_angular_damping, set_mass, set_gravity_scale, bake_navmesh, spawn_walker, walk_to, set_walk_speed, stop_walking, clicked_entity, entity_under_cursor, cursor_on_ground, spawn_world_panel, world_panel_button, world_panel_label, world_button_clicked, pause_sound, resume_sound, fade_volume, crossfade, set_bus_volume, duck_voice, directional_light, area_light, set_light_shadows, emit_sparks, emit_firework, emit_particles, set_alpha_blend, set_alpha_cutoff, set_double_sided, set_ior, set_transmission, set_clearcoat, set_anisotropy, set_uv_transform, set_sheen, set_iridescence, set_specular, set_normal_scale, set_occlusion_strength, set_emissive_strength, set_thickness, set_text_outline, set_morph_weight, set_window_title, lock_cursor, request_exit, set_render_layer, set_camera_layers, third_person_camera, spawn_cloth, reset_cloth, set_wind, pause_cutscene, resume_cutscene, stop_cutscene, seek_cutscene, set_cutscene_camera, bind_cutscene_actor, spawn_cylinder_body, spawn_capsule_body, set_controller_speed, set_controller_jump, is_grounded, load_texture, load_texture_linear, register_texture, list_materials, material, register_material, update_material, set_material_variant, spawn_objects, spawn_instanced, spawn_instanced_with_material, set_instances, spawn_cloth_sheet, blend_to_animation_named, add_animation_layer, name_entity, name, set_entity_name, children, descendants, roots, scene_tree, material_of, color, metallic_roughness, emissive, unlit, texture, describe_entity, set_text_alignment, set_morph_weights, morph_weight, morph_target_count, set_fog, set_fog_mode, set_depth_of_field, screenshot, set_shading_mode, animate_position, animate_scale, animate_color, shake_camera, reach_to, bounds, bounds_of, frame_entities, spawn_particle_emitter, set_emitter, spawn_decal, save_scene, load_scene, window_size, cursor_locked, frames_per_second, frame_count, uptime_milliseconds, bake_navmesh_with, raycast, attach_fixed, attach_hinge, attach_spring, attach_rope, controller_velocity, move_character, request_surface_pick, take_surface_pick, world_button_hovered, load_sound, play_sound, play_sound_looping, play_sound_at, set_volume, stop_sound, set_pitch, set_spatial_distance, panel_checkbox, checkbox_value, panel_slider, slider_value, set_slider_value, panel_text_input, text_input_changed, panel_dropdown, dropdown_selected, panel_progress_bar, set_progress, panel_toggle, toggle_value, panel_radio, radio_selected, panel_range_slider, set_range, panel_tabs, set_tab, panel_collapsing, panel_color_picker, color_value, panel_text_area, panel_text_area_with_value, set_text_area, panel_multi_select, set_multi_select, panel_date_picker, set_date, panel_menu, panel_color_picker_hsv, panel_splitter, panel_breadcrumb, panel_virtual_list, panel_table, panel_data_grid, set_data_grid_rows, set_data_grid_cell, data_grid_selection_changed, panel_command_palette, panel_property_grid, panel_property_row, panel_tree_view, tree_content, tree_node, tree_node_children, set_tree_node_expanded, tree_view_selected, panel_drag_value, drag_value, panel_selectable, panel_modal, panel_spinner, panel_separator, panel_heading, save_scene_to_file, load_scene_from_file, text_free
 
 import "mem.frost"
 
@@ -32,6 +32,10 @@ Bytes :: linear struct { items: []u8, pointer: ^u8, count: i64 }
 // once. It owns both the copies and the array of pointers into them.
 CStrings :: struct { pointer: ^^i8, blocks: []^u8, count: i64 }
 
+frost_rt_error :: extern fn(text: ^i8)
+frost_rt_die :: safe extern fn()
+frost_rt_bounds_check :: safe extern fn(index: i64, length: i64)
+
 ns_open :: extern fn() -> App
 ns_frame :: extern fn(app: App) -> bool
 ns_close :: extern fn(app: App)
@@ -40,19 +44,30 @@ ns_free_entities :: extern fn(pointer: ^Entity, len: i64)
 ns_free_strings :: extern fn(pointer: ^^i8, len: i64)
 ns_free_bytes :: extern fn(pointer: ^u8, len: i64)
 
+null_of :: fn($T: Type) -> ^T {
+    zero := 0
+    unsafe { ptr_cast($T, zero) }
+}
+
 // Opens a window with the default lit scene. Release it with `close`.
-open :: fn() -> App { unsafe { ns_open() } }
+//
+// A handle of nothing is what C answers with when the window could not be
+// opened. Every later call would read through it and do nothing, so the failure
+// is said here rather than as a program that runs and draws no frames.
+open :: fn() -> App {
+    held := unsafe { ns_open() }
+    if (held == null_of($u8)) {
+        unsafe { frost_rt_error("nightshade: the engine did not open\n") }
+        frost_rt_die()
+    }
+    held
+}
 
 // Advances one frame. False when the engine asks to exit, which is what a main
 // loop runs until.
 frame :: fn(app: App) -> bool { unsafe { ns_frame(app) } }
 
 close :: fn(app: App) { unsafe { ns_close(app) } }
-
-null_of :: fn($T: Type) -> ^T {
-    zero := 0
-    unsafe { ptr_cast($T, zero) }
-}
 
 // A NUL-terminated copy of a string, for the calls below. C reads one until a
 // NUL and a `str` has none, so the terminator is added here rather than
@@ -95,17 +110,22 @@ c_strings_free :: fn(move held: CStrings) {
     heap_release($^i8, held.pointer)
 }
 
+// The bytes at a NUL-terminated pointer, counted.
+cstr_len :: fn(raw: ^i8) -> i64 {
+    mut length : i64 = 0
+    while (unsafe { raw[length] } != 0) {
+        length = length + 1
+    }
+    length
+}
+
 // Text the engine allocated, as a view of the bytes it owns.
 text_from :: fn(raw: ^i8) -> Text {
     if (raw == null_of($i8)) {
         return Text { text = "", pointer = raw }
     }
-    mut length : i64 = 0
-    while (unsafe { raw[length] } != 0) {
-        length = length + 1
-    }
     Text {
-        text = unsafe { slice_from($u8, ptr_cast($u8, raw), length) },
+        text = unsafe { slice_from($u8, ptr_cast($u8, raw), cstr_len(raw)) },
         pointer = raw,
     }
 }
@@ -144,15 +164,14 @@ strings_from :: fn(pointer: ^^i8, count: i64) -> Strings {
     Strings { pointer = pointer, count = count }
 }
 
-// One of the strings, as a view of the bytes C owns. It lasts until the run is
-// freed.
+// One of the strings, as a view of the bytes C owns. The index is checked
+// against the run's length the way a slice index is, because the run is a raw
+// pointer and nothing else here would catch reading past its end. The view
+// lasts until the run is freed.
 strings_at :: fn(held: Strings, index: i64) -> str {
+    frost_rt_bounds_check(index, held.count)
     raw := unsafe { held.pointer[index] }
-    mut length : i64 = 0
-    while (unsafe { raw[length] } != 0) {
-        length = length + 1
-    }
-    unsafe { slice_from($u8, ptr_cast($u8, raw), length) }
+    unsafe { slice_from($u8, ptr_cast($u8, raw), cstr_len(raw)) }
 }
 
 strings_free :: fn(move held: Strings) {
