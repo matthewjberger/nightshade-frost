@@ -1,0 +1,1316 @@
+// Generates Frost bindings for nightshade from nightshade.json.
+//
+//   just bindgen
+//
+// `nightshade.json` is what the engine's own `dump_manifest` example prints:
+// the command manifest beside the command schema. The C header is generated
+// from those same two documents, so this reads the source of truth rather than
+// parsing the header.
+//
+// The manifest says what each command's fields mean rather than what C spells
+// them as. A text field becomes a `str`, a list becomes a slice, and a reply
+// that allocates becomes a linear resource.
+
+import "json.frost"
+import "fs.frost"
+import "mem.frost"
+import "format.frost"
+import "strings.frost"
+import "vec.frost"
+import "io.frost"
+
+IDL :: "nightshade.json"
+OUT :: "nightshade.frost"
+
+// A type a command names that is not a scalar: an enum whose variants carry
+// nothing, an enum whose variants carry payloads, or a plain struct passed by
+// value. Which one it is decides what gets emitted for it.
+PLAIN_ENUM :: 0
+DATA_ENUM :: 1
+WIRE :: 2
+
+TypeInfo :: struct {
+    type_name: str,
+    node: i64,
+    kind: i64,
+}
+
+// What a payload or a wire field holds.
+SCALAR_F32 :: 0
+SCALAR_BOOL :: 1
+SCALAR_U32 :: 2
+SCALAR_ARRAY :: 3
+SCALAR_BYTES :: 4
+
+// ---------------------------------------------------------------------------
+// Names
+//
+// A type name arrives as Rust spells it: `Shape`, `crate::text::ScreenAnchor`,
+// `Vec<InstanceWire>`. What Frost wants is the bare name at the end, so every
+// name is written through a range rather than copied into a buffer first.
+// ---------------------------------------------------------------------------
+
+bare_start :: fn(name: str) -> i64 {
+    mut start : i64 = 0
+    mut index : i64 = 0
+    while (index < str_len(name)) {
+        if (name[index] == 60) {
+            start = index + 1
+        }
+        index = index + 1
+    }
+    mut scan := start
+    mut last := start
+    while (scan + 1 < str_len(name)) {
+        if (name[scan] == 58 && name[scan + 1] == 58) {
+            last = scan + 2
+        }
+        scan = scan + 1
+    }
+    last
+}
+
+bare_stop :: fn(name: str) -> i64 {
+    mut stop := str_len(name)
+    mut index : i64 = 0
+    while (index < str_len(name)) {
+        if (name[index] == 62) {
+            stop = index
+        }
+        index = index + 1
+    }
+    stop
+}
+
+append_bare :: fn(mut out: Builder, name: str) {
+    mut index := bare_start(name)
+    stop := bare_stop(name)
+    while (index < stop) {
+        builder_byte(out, name[index])
+        index = index + 1
+    }
+}
+
+// `SpawnCube` becomes `spawn_cube`. An underscore goes before every capital but
+// the first, which is the rule the C symbols were generated with, so the extern
+// names this writes are the ones the linker will look for.
+append_snake :: fn(mut out: Builder, name: str) {
+    mut index : i64 = 0
+    while (index < str_len(name)) {
+        byte := name[index]
+        if (byte >= 65 && byte <= 90) {
+            if (index > 0) {
+                builder_byte(out, 95)
+            }
+            builder_byte(out, byte + 32)
+        } else {
+            builder_byte(out, byte)
+        }
+        index = index + 1
+    }
+}
+
+append_screaming :: fn(mut out: Builder, name: str) {
+    mut index : i64 = 0
+    while (index < str_len(name)) {
+        byte := name[index]
+        if (byte >= 65 && byte <= 90) {
+            if (index > 0) {
+                builder_byte(out, 95)
+            }
+            builder_byte(out, byte)
+        } else {
+            if (byte >= 97 && byte <= 122) {
+                builder_byte(out, byte - 32)
+            } else {
+                builder_byte(out, byte)
+            }
+        }
+        index = index + 1
+    }
+}
+
+append_bare_screaming :: fn(mut out: Builder, name: str) {
+    start := bare_start(name)
+    stop := bare_stop(name)
+    mut index := start
+    while (index < stop) {
+        byte := name[index]
+        if (byte >= 65 && byte <= 90) {
+            if (index > start) {
+                builder_byte(out, 95)
+            }
+            builder_byte(out, byte)
+        } else {
+            if (byte >= 97 && byte <= 122) {
+                builder_byte(out, byte - 32)
+            } else {
+                builder_byte(out, byte)
+            }
+        }
+        index = index + 1
+    }
+}
+
+// A description goes into the generated file as a comment, so it stops at the
+// first backslash: a json escape would otherwise become two literal characters
+// in the middle of a line of Frost.
+append_comment :: fn(mut out: Builder, text: str) {
+    mut index : i64 = 0
+    while (index < str_len(text)) {
+        if (text[index] == 92) {
+            return
+        }
+        builder_byte(out, text[index])
+        index = index + 1
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Reading the two documents
+// ---------------------------------------------------------------------------
+
+// A run of the document's bytes, under its own length. The base is the block
+// the file was read into rather than a local copy of the view over it: a
+// pointer taken from a pointer is the caller's to keep, and one taken from a
+// binding in this frame would name storage that dies at the return.
+view :: fn(base: ^u8, off: i64, length: i64) -> str {
+    unsafe { slice_from($u8, bytes_at(base, off), length) }
+}
+
+text_of :: fn(base: ^u8, mut document: Json, node: i64) -> str {
+    view(base, json_text_off(document, node), json_text_len(document, node))
+}
+
+key_of :: fn(base: ^u8, mut document: Json, node: i64) -> str {
+    held := vec_slice($JsonNode, document.nodes)[node]
+    view(base, held.key_off, held.key_len)
+}
+
+member_str :: fn(base: ^u8, mut document: Json, object: i64, name: str) -> str {
+    node := json_member(document, object, name)
+    if (node < 0) {
+        return ""
+    }
+    text_of(base, document, node)
+}
+
+// The schema for one command's one field. The command schema is a `oneOf` of
+// single-member objects, so finding a command is a walk over that list.
+field_schema :: fn(mut document: Json, schema: i64, variant: str,
+    field: str) -> i64 {
+    entries := json_member(document, schema, "oneOf")
+    count := json_count(document, entries)
+    mut index : i64 = 0
+    while (index < count) {
+        entry := json_at(document, entries, index)
+        properties := json_member(document, entry, "properties")
+        held := json_member(document, properties, variant)
+        if (held >= 0) {
+            inner := json_member(document, held, "properties")
+            return json_member(document, inner, field)
+        }
+        index = index + 1
+    }
+    0 - 1
+}
+
+type_is_scalar :: fn(name: str) -> bool {
+    str_eq(name, "f32") || str_eq(name, "u32") || str_eq(name, "u64")
+        || str_eq(name, "i32") || str_eq(name, "u8") || str_eq(name, "usize")
+        || str_eq(name, "bool") || str_eq(name, "[f32; 2]")
+        || str_eq(name, "[f32; 3]") || str_eq(name, "[f32; 4]")
+}
+
+array_count :: fn(name: str) -> i64 {
+    if (str_eq(name, "[f32; 2]")) { return 2 }
+    if (str_eq(name, "[f32; 3]")) { return 3 }
+    if (str_eq(name, "[f32; 4]")) { return 4 }
+    0
+}
+
+// A length crosses as an i64: that is what C's uintptr_t is on the targets this
+// builds for, and what slice_len answers with.
+scalar_frost :: fn(name: str) -> str {
+    if (str_eq(name, "usize")) {
+        return "i64"
+    }
+    name
+}
+
+// What a schema node holds, classified the way the C generator classifies it so
+// the two agree on every struct's layout.
+payload_kind :: fn(mut document: Json, node: i64) -> i64 {
+    kind := json_member(document, node, "type")
+    if (json_text_eq(document, kind, "number")) {
+        return SCALAR_F32
+    }
+    if (json_text_eq(document, kind, "boolean")) {
+        return SCALAR_BOOL
+    }
+    if (json_text_eq(document, kind, "integer")) {
+        return SCALAR_U32
+    }
+    if (json_text_eq(document, kind, "array")) {
+        items := json_member(document, node, "items")
+        item_kind := json_member(document, items, "type")
+        maximum := json_member(document, node, "maxItems")
+        if (json_text_eq(document, item_kind, "number") && maximum >= 0) {
+            return SCALAR_ARRAY
+        }
+        if (json_text_eq(document, item_kind, "integer") && maximum < 0) {
+            return SCALAR_BYTES
+        }
+    }
+    0 - 1
+}
+
+append_scalar_type :: fn(mut out: Builder, mut document: Json, node: i64) {
+    kind := payload_kind(document, node)
+    if (kind == SCALAR_F32) {
+        builder_str_value(out, "f32")
+        return
+    }
+    if (kind == SCALAR_BOOL) {
+        builder_str_value(out, "bool")
+        return
+    }
+    if (kind == SCALAR_U32) {
+        builder_str_value(out, "u32")
+        return
+    }
+    if (kind == SCALAR_ARRAY) {
+        builder_byte(out, 91)
+        builder_int(out, json_number(document,
+            json_member(document, node, "maxItems")))
+        builder_byte(out, 93)
+        builder_str_value(out, "f32")
+        return
+    }
+    builder_str_value(out, "^u8")
+}
+
+// ---------------------------------------------------------------------------
+// Collecting the types the commands name
+// ---------------------------------------------------------------------------
+
+find_type :: fn(mut types: Vec<TypeInfo>, name: str) -> i64 {
+    held := vec_slice($TypeInfo, types)
+    mut index : i64 = 0
+    while (index < slice_len(held)) {
+        if (str_eq(held[index].type_name, name)) {
+            return index
+        }
+        index = index + 1
+    }
+    0 - 1
+}
+
+type_kind :: fn(mut types: Vec<TypeInfo>, name: str) -> i64 {
+    slot := find_type(types, name)
+    if (slot < 0) {
+        return 0 - 1
+    }
+    vec_slice($TypeInfo, types)[slot].kind
+}
+
+// An enum reaches the schema in two spellings: a `oneOf` when a variant can
+// carry a payload, and a bare `enum` list of names when none of them can.
+classify :: fn(mut document: Json, node: i64) -> i64 {
+    if (json_member(document, node, "enum") >= 0) {
+        return PLAIN_ENUM
+    }
+    entries := json_member(document, node, "oneOf")
+    if (entries >= 0) {
+        count := json_count(document, entries)
+        mut index : i64 = 0
+        while (index < count) {
+            entry := json_at(document, entries, index)
+            if (json_member(document, entry, "const") < 0) {
+                return DATA_ENUM
+            }
+            index = index + 1
+        }
+        return PLAIN_ENUM
+    }
+    WIRE
+}
+
+collect_types :: fn(mut types: Vec<TypeInfo>, base: ^u8, mut document: Json,
+    manifest: i64, schema: i64) {
+    total := json_count(document, manifest)
+    mut index : i64 = 0
+    while (index < total) {
+        command := json_at(document, manifest, index)
+        variant := member_str(base, document, command, "name")
+        fields := json_member(document, command, "fields")
+        count := json_count(document, fields)
+        mut position : i64 = 0
+        while (position < count) {
+            field := json_at(document, fields, position)
+            role := member_str(base, document, field, "role")
+            type_name := member_str(base, document, field, "type_name")
+            name := member_str(base, document, field, "name")
+
+            mut wanted := false
+            if (str_eq(role, "copy") && type_is_scalar(type_name) == false) {
+                wanted = true
+            }
+            if (str_eq(role, "owned") && str_eq(type_name, "String") == false) {
+                wanted = true
+            }
+            if (str_eq(role, "transforms")) {
+                wanted = true
+            }
+
+            if (wanted && find_type(types, type_name) < 0) {
+                mut node := field_schema(document, schema, variant, name)
+                if (str_eq(role, "transforms")) {
+                    node = json_member(document, node, "items")
+                }
+                if (node >= 0) {
+                    vec_push($TypeInfo, types, TypeInfo {
+                        type_name = type_name,
+                        node = node,
+                        kind = classify(document, node),
+                    })
+                }
+            }
+            position = position + 1
+        }
+        index = index + 1
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Emitting the types
+// ---------------------------------------------------------------------------
+
+// A variant's name is its `const` when it carries nothing, the single key of
+// its `properties` when it carries a payload, and the string itself when it
+// came out of a bare `enum` list.
+variant_name :: fn(base: ^u8, mut document: Json, entry: i64) -> str {
+    held := json_member(document, entry, "const")
+    if (held >= 0) {
+        return text_of(base, document, held)
+    }
+    properties := json_member(document, entry, "properties")
+    if (properties >= 0) {
+        return key_of(base, document, json_at(document, properties, 0))
+    }
+    text_of(base, document, entry)
+}
+
+// An enum whose variants carry nothing crosses as an integer, so what a program
+// needs is a name for each number rather than a type.
+emit_plain_enum :: fn(mut out: Builder, mut names: Builder, base: ^u8,
+    mut document: Json, info: TypeInfo) {
+    mut entries := json_member(document, info.node, "oneOf")
+    if (entries < 0) {
+        entries = json_member(document, info.node, "enum")
+    }
+    count := json_count(document, entries)
+    mut index : i64 = 0
+    while (index < count) {
+        entry := json_at(document, entries, index)
+        variant := variant_name(base, document, entry)
+
+        append_bare_screaming(out, info.type_name)
+        builder_byte(out, 95)
+        append_screaming(out, variant)
+        builder_str_value(out, " :: ")
+        builder_int(out, index)
+        builder_byte(out, 10)
+
+        append_bare_screaming(names, info.type_name)
+        builder_byte(names, 95)
+        append_screaming(names, variant)
+        builder_str_value(names, ", ")
+        index = index + 1
+    }
+    builder_byte(out, 10)
+}
+
+// An enum whose variants carry payloads crosses as one struct: a tag saying
+// which variant, and room for every payload beside it. That is what the C
+// header declares, and the two layouts have to agree byte for byte.
+emit_data_enum :: fn(mut out: Builder, mut names: Builder, base: ^u8,
+    mut document: Json, info: TypeInfo) {
+    entries := json_member(document, info.node, "oneOf")
+    count := json_count(document, entries)
+
+    append_bare(out, info.type_name)
+    builder_str_value(out, " :: struct { tag: u32")
+    mut index : i64 = 0
+    while (index < count) {
+        entry := json_at(document, entries, index)
+        if (json_member(document, entry, "const") < 0) {
+            properties := json_member(document, entry, "properties")
+            payload := json_at(document, properties, 0)
+            variant := key_of(base, document, payload)
+            inner := json_member(document, payload, "properties")
+            if (inner >= 0) {
+                members := json_count(document, inner)
+                mut member : i64 = 0
+                while (member < members) {
+                    held := json_at(document, inner, member)
+                    builder_str_value(out, ", ")
+                    append_snake(out, variant)
+                    builder_byte(out, 95)
+                    builder_str_value(out, key_of(base, document, held))
+                    builder_str_value(out, ": ")
+                    append_scalar_type(out, document, held)
+                    member = member + 1
+                }
+            } else {
+                builder_str_value(out, ", ")
+                append_snake(out, variant)
+                builder_str_value(out, ": ")
+                append_scalar_type(out, document, payload)
+                if (payload_kind(document, payload) == SCALAR_BYTES) {
+                    builder_str_value(out, ", ")
+                    append_snake(out, variant)
+                    builder_str_value(out, "_len: i64")
+                }
+            }
+        }
+        index = index + 1
+    }
+    builder_str_value(out, " }
+")
+
+    append_bare(names, info.type_name)
+    builder_str_value(names, ", ")
+
+    mut tag : i64 = 0
+    while (tag < count) {
+        entry := json_at(document, entries, tag)
+        variant := variant_name(base, document, entry)
+
+        append_bare_screaming(out, info.type_name)
+        builder_byte(out, 95)
+        append_screaming(out, variant)
+        builder_str_value(out, " :: ")
+        builder_int(out, tag)
+        builder_byte(out, 10)
+
+        append_bare_screaming(names, info.type_name)
+        builder_byte(names, 95)
+        append_screaming(names, variant)
+        builder_str_value(names, ", ")
+        tag = tag + 1
+    }
+    builder_byte(out, 10)
+}
+
+// A plain struct a command takes by value. Its fields are the schema's, in the
+// schema's order, which is the order the C struct declares them in.
+emit_wire :: fn(mut out: Builder, mut names: Builder, base: ^u8,
+    mut document: Json, info: TypeInfo) {
+    properties := json_member(document, info.node, "properties")
+    count := json_count(document, properties)
+    append_bare(out, info.type_name)
+    builder_str_value(out, " :: struct { ")
+    mut index : i64 = 0
+    while (index < count) {
+        held := json_at(document, properties, index)
+        if (index > 0) {
+            builder_str_value(out, ", ")
+        }
+        builder_str_value(out, key_of(base, document, held))
+        builder_str_value(out, ": ")
+        append_scalar_type(out, document, held)
+        index = index + 1
+    }
+    builder_str_value(out, " }
+
+")
+    append_bare(names, info.type_name)
+    builder_str_value(names, ", ")
+}
+
+// ---------------------------------------------------------------------------
+// Emitting the commands
+//
+// Each command becomes an extern spelling the C ABI exactly, and a wrapper
+// under the name a program reads. The wrapper is where a `str` becomes a
+// NUL-terminated copy, a slice becomes a pointer and a length, and memory C
+// handed back becomes a resource the compiler counts.
+// ---------------------------------------------------------------------------
+
+// The letter a vector's nth component is spelled with, which is what the C
+// signature names each of the floats a position or a color spreads into.
+component_suffix :: fn(index: i64) -> i64 {
+    if (index == 0) { return 120 }
+    if (index == 1) { return 121 }
+    if (index == 2) { return 122 }
+    119
+}
+
+// How many float components a field spreads into, and zero when it is not one.
+component_count :: fn(role: str, type_name: str) -> i64 {
+    if (str_eq(role, "vec2")) { return 2 }
+    if (str_eq(role, "vec3")) { return 3 }
+    if (str_eq(role, "copy")) { return array_count(type_name) }
+    0
+}
+
+// The element type of a list parameter, as Frost spells it.
+list_element :: fn(role: str) -> str {
+    if (str_eq(role, "bytes")) { return "u8" }
+    if (str_eq(role, "floats")) { return "f32" }
+    if (str_eq(role, "indices")) { return "u32" }
+    if (str_eq(role, "vec3_list")) { return "Vec3" }
+    if (str_eq(role, "refs")) { return "Entity" }
+    if (str_eq(role, "strs")) { return "^i8" }
+    ""
+}
+
+is_list_role :: fn(role: str) -> bool {
+    str_eq(role, "bytes") || str_eq(role, "floats") || str_eq(role, "indices")
+        || str_eq(role, "vec3_list") || str_eq(role, "refs")
+        || str_eq(role, "strs") || str_eq(role, "transforms")
+}
+
+is_text_role :: fn(role: str, type_name: str) -> bool {
+    str_eq(role, "text")
+        || (str_eq(role, "owned") && str_eq(type_name, "String"))
+}
+
+append_list_element :: fn(mut out: Builder, role: str, type_name: str) {
+    if (str_eq(role, "transforms")) {
+        append_bare(out, type_name)
+        return
+    }
+    builder_str_value(out, list_element(role))
+}
+
+// The declaration a field contributes to the extern, which is the C signature.
+// A struct crossing by value says `value`, because an aggregate parameter to an
+// extern is a pointer unless it says otherwise and C passes these in registers.
+emit_extern_field :: fn(mut out: Builder, base: ^u8, mut document: Json,
+    mut types: Vec<TypeInfo>, field: i64) {
+    role := member_str(base, document, field, "role")
+    type_name := member_str(base, document, field, "type_name")
+    name := member_str(base, document, field, "name")
+
+    if (str_eq(role, "entity")) {
+        builder_str_value(out, ", value ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": Entity")
+        return
+    }
+    if (str_eq(role, "opt_entity")) {
+        builder_str_value(out, ", value ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": Entity, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_present: bool")
+        return
+    }
+    if (str_eq(role, "opt_vec3")) {
+        builder_str_value(out, ", value ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": Vec3, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_present: bool")
+        return
+    }
+    components := component_count(role, type_name)
+    if (components > 0) {
+        mut index : i64 = 0
+        while (index < components) {
+            builder_str_value(out, ", ")
+            builder_str_value(out, name)
+            builder_byte(out, 95)
+            builder_byte(out, component_suffix(index))
+            builder_str_value(out, ": f32")
+            index = index + 1
+        }
+        return
+    }
+    if (is_text_role(role, type_name)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": ^i8")
+        return
+    }
+    if (is_list_role(role)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": ^")
+        append_list_element(out, role, type_name)
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_len: i64")
+        return
+    }
+    if (type_is_scalar(type_name)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": ")
+        builder_str_value(out, scalar_frost(type_name))
+        return
+    }
+    if (type_kind(types, type_name) == PLAIN_ENUM) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": u32")
+        return
+    }
+    builder_str_value(out, ", value ")
+    builder_str_value(out, name)
+    builder_str_value(out, ": ")
+    append_bare(out, type_name)
+}
+
+// The declaration a field contributes to the wrapper, which is what a program
+// writes: text is a `str`, a list is a slice, and the rest is what C takes.
+emit_wrapper_field :: fn(mut out: Builder, base: ^u8, mut document: Json,
+    mut types: Vec<TypeInfo>, field: i64) {
+    role := member_str(base, document, field, "role")
+    type_name := member_str(base, document, field, "type_name")
+    name := member_str(base, document, field, "name")
+
+    if (str_eq(role, "entity")) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": Entity")
+        return
+    }
+    if (str_eq(role, "opt_entity")) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": Entity, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_present: bool")
+        return
+    }
+    if (str_eq(role, "opt_vec3")) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": Vec3, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_present: bool")
+        return
+    }
+    components := component_count(role, type_name)
+    if (components > 0) {
+        mut index : i64 = 0
+        while (index < components) {
+            builder_str_value(out, ", ")
+            builder_str_value(out, name)
+            builder_byte(out, 95)
+            builder_byte(out, component_suffix(index))
+            builder_str_value(out, ": f32")
+            index = index + 1
+        }
+        return
+    }
+    if (is_text_role(role, type_name)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": str")
+        return
+    }
+    if (str_eq(role, "strs")) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": []str")
+        return
+    }
+    if (is_list_role(role)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": []")
+        append_list_element(out, role, type_name)
+        return
+    }
+    if (type_is_scalar(type_name)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": ")
+        builder_str_value(out, scalar_frost(type_name))
+        return
+    }
+    if (type_kind(types, type_name) == PLAIN_ENUM) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ": u32")
+        return
+    }
+    builder_str_value(out, ", ")
+    builder_str_value(out, name)
+    builder_str_value(out, ": ")
+    append_bare(out, type_name)
+}
+
+// The statements a field needs before the call: a NUL-terminated copy for text,
+// a run of them for a list of text, and a pointer for a list, which is a null
+// one when the slice is empty because there is no first element to point at.
+emit_field_pre :: fn(mut out: Builder, base: ^u8, mut document: Json,
+    field: i64) {
+    role := member_str(base, document, field, "role")
+    type_name := member_str(base, document, field, "type_name")
+    name := member_str(base, document, field, "name")
+
+    if (is_text_role(role, type_name)) {
+        builder_str_value(out, "    ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held := c_string(")
+        builder_str_value(out, name)
+        builder_str_value(out, ")
+")
+        return
+    }
+    if (str_eq(role, "strs")) {
+        builder_str_value(out, "    ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held := c_strings(")
+        builder_str_value(out, name)
+        builder_str_value(out, ")
+")
+        return
+    }
+    if (is_list_role(role)) {
+        builder_str_value(out, "    mut ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_ptr := null_of($")
+        append_list_element(out, role, type_name)
+        builder_str_value(out, ")
+    if (slice_len(")
+        builder_str_value(out, name)
+        builder_str_value(out, ") > 0) {
+        ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_ptr = ptr_to(")
+        builder_str_value(out, name)
+        builder_str_value(out, "[0])
+    }
+")
+    }
+}
+
+emit_field_post :: fn(mut out: Builder, base: ^u8, mut document: Json,
+    field: i64) {
+    role := member_str(base, document, field, "role")
+    type_name := member_str(base, document, field, "type_name")
+    name := member_str(base, document, field, "name")
+    if (is_text_role(role, type_name)) {
+        builder_str_value(out, "    heap_release($u8, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held)
+")
+        return
+    }
+    if (str_eq(role, "strs")) {
+        builder_str_value(out, "    c_strings_free(")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held)
+")
+    }
+}
+
+emit_call_field :: fn(mut out: Builder, base: ^u8, mut document: Json,
+    field: i64) {
+    role := member_str(base, document, field, "role")
+    type_name := member_str(base, document, field, "type_name")
+    name := member_str(base, document, field, "name")
+
+    if (str_eq(role, "opt_entity") || str_eq(role, "opt_vec3")) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_present")
+        return
+    }
+    components := component_count(role, type_name)
+    if (components > 0) {
+        mut index : i64 = 0
+        while (index < components) {
+            builder_str_value(out, ", ")
+            builder_str_value(out, name)
+            builder_byte(out, 95)
+            builder_byte(out, component_suffix(index))
+            index = index + 1
+        }
+        return
+    }
+    if (is_text_role(role, type_name)) {
+        builder_str_value(out, ", ptr_cast($i8, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held)")
+        return
+    }
+    if (str_eq(role, "strs")) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held.pointer, ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_held.count")
+        return
+    }
+    if (is_list_role(role)) {
+        builder_str_value(out, ", ")
+        builder_str_value(out, name)
+        builder_str_value(out, "_ptr, slice_len(")
+        builder_str_value(out, name)
+        builder_byte(out, 41)
+        return
+    }
+    builder_str_value(out, ", ")
+    builder_str_value(out, name)
+}
+
+// ---------------------------------------------------------------------------
+// Replies
+// ---------------------------------------------------------------------------
+
+append_reply_extern_type :: fn(mut out: Builder, reply: str) {
+    if (str_eq(reply, "entity")) { builder_str_value(out, "Entity")  return }
+    if (str_eq(reply, "bool")) { builder_str_value(out, "bool")  return }
+    if (str_eq(reply, "float")) { builder_str_value(out, "f32")  return }
+    if (str_eq(reply, "int")) { builder_str_value(out, "i64")  return }
+    if (str_eq(reply, "vector")) { builder_str_value(out, "Vec3")  return }
+    if (str_eq(reply, "opt_entity") || str_eq(reply, "opt_vector")) {
+        builder_str_value(out, "bool")
+        return
+    }
+    if (str_eq(reply, "text") || str_eq(reply, "json")) {
+        builder_str_value(out, "^i8")
+        return
+    }
+    if (str_eq(reply, "bytes")) { builder_str_value(out, "^u8")  return }
+    if (str_eq(reply, "entities")) { builder_str_value(out, "^Entity")  return }
+    if (str_eq(reply, "strings")) { builder_str_value(out, "^^i8") }
+}
+
+append_reply_wrapper_type :: fn(mut out: Builder, reply: str) {
+    if (str_eq(reply, "opt_entity")) {
+        builder_str_value(out, "(found: bool, entity: Entity)")
+        return
+    }
+    if (str_eq(reply, "opt_vector")) {
+        builder_str_value(out, "(found: bool, vector: Vec3)")
+        return
+    }
+    if (str_eq(reply, "text") || str_eq(reply, "json")) {
+        builder_str_value(out, "Text")
+        return
+    }
+    if (str_eq(reply, "bytes")) { builder_str_value(out, "Bytes")  return }
+    if (str_eq(reply, "entities")) { builder_str_value(out, "Entities")  return }
+    if (str_eq(reply, "strings")) { builder_str_value(out, "Strings")  return }
+    append_reply_extern_type(out, reply)
+}
+
+reply_has_out :: fn(reply: str) -> bool {
+    str_eq(reply, "bytes") || str_eq(reply, "entities")
+        || str_eq(reply, "strings")
+}
+
+// ---------------------------------------------------------------------------
+// One command
+// ---------------------------------------------------------------------------
+
+emit_command :: fn(mut out: Builder, mut names: Builder, base: ^u8,
+    mut document: Json, mut types: Vec<TypeInfo>, command: i64) {
+    variant := member_str(base, document, command, "name")
+    reply := member_str(base, document, command, "reply")
+    description := member_str(base, document, command, "description")
+    fields := json_member(document, command, "fields")
+    count := json_count(document, fields)
+
+    if (str_len(description) > 0) {
+        builder_str_value(out, "// ")
+        append_comment(out, description)
+        builder_byte(out, 10)
+    }
+
+    // The extern, spelling the C signature. It is not exported: calling C is
+    // unchecked, and the wrapper below is the one place a program does it.
+    builder_str_value(out, "ns_")
+    append_snake(out, variant)
+    builder_str_value(out, " :: extern fn(app: App")
+    mut index : i64 = 0
+    while (index < count) {
+        emit_extern_field(out, base, document, types,
+            json_at(document, fields, index))
+        index = index + 1
+    }
+    if (str_eq(reply, "opt_entity")) {
+        builder_str_value(out, ", out: ^Entity")
+    }
+    if (str_eq(reply, "opt_vector")) {
+        builder_str_value(out, ", out: ^Vec3")
+    }
+    if (reply_has_out(reply)) {
+        builder_str_value(out, ", out_len: ^i64")
+    }
+    builder_byte(out, 41)
+    if (str_eq(reply, "none") == false) {
+        builder_str_value(out, " -> ")
+        append_reply_extern_type(out, reply)
+    }
+    builder_byte(out, 10)
+
+    // The wrapper, under the name a program reads.
+    append_snake(out, variant)
+    append_snake(names, variant)
+    builder_str_value(names, ", ")
+    builder_str_value(out, " :: fn(app: App")
+    mut declared : i64 = 0
+    while (declared < count) {
+        emit_wrapper_field(out, base, document, types,
+            json_at(document, fields, declared))
+        declared = declared + 1
+    }
+    builder_byte(out, 41)
+    if (str_eq(reply, "none") == false) {
+        builder_str_value(out, " -> ")
+        append_reply_wrapper_type(out, reply)
+    }
+    builder_str_value(out, " {
+")
+
+    mut prepared : i64 = 0
+    while (prepared < count) {
+        emit_field_pre(out, base, document, json_at(document, fields, prepared))
+        prepared = prepared + 1
+    }
+
+    if (str_eq(reply, "opt_entity")) {
+        builder_str_value(out, "    mut out := Entity { id = 0, generation = 0 }
+")
+    }
+    if (str_eq(reply, "opt_vector")) {
+        builder_str_value(out, "    mut out := Vec3 { x = 0.0, y = 0.0, z = 0.0 }
+")
+    }
+    if (reply_has_out(reply)) {
+        builder_str_value(out, "    mut out_len : i64 = 0
+")
+    }
+
+    // The call. Its answer is bound whenever anything after it runs, and
+    // returned straight out when nothing does.
+    answers := str_eq(reply, "none") == false
+    builder_str_value(out, "    ")
+    if (answers) {
+        builder_str_value(out, "held := ")
+    }
+    builder_str_value(out, "unsafe { ns_")
+    append_snake(out, variant)
+    builder_str_value(out, "(app")
+    mut forwarded : i64 = 0
+    while (forwarded < count) {
+        emit_call_field(out, base, document, json_at(document, fields, forwarded))
+        forwarded = forwarded + 1
+    }
+    if (str_eq(reply, "opt_entity") || str_eq(reply, "opt_vector")) {
+        builder_str_value(out, ", ptr_to(out)")
+    }
+    if (reply_has_out(reply)) {
+        builder_str_value(out, ", ptr_to(out_len)")
+    }
+    builder_str_value(out, ") }
+")
+
+    mut released : i64 = 0
+    while (released < count) {
+        emit_field_post(out, base, document, json_at(document, fields, released))
+        released = released + 1
+    }
+
+    if (str_eq(reply, "opt_entity") || str_eq(reply, "opt_vector")) {
+        builder_str_value(out, "    return held, out
+")
+    }
+    if (str_eq(reply, "text") || str_eq(reply, "json")) {
+        builder_str_value(out, "    text_from(held)
+")
+    }
+    if (str_eq(reply, "entities")) {
+        builder_str_value(out, "    entities_from(held, out_len)
+")
+    }
+    if (str_eq(reply, "strings")) {
+        builder_str_value(out, "    strings_from(held, out_len)
+")
+    }
+    if (str_eq(reply, "bytes")) {
+        builder_str_value(out, "    bytes_from(held, out_len)
+")
+    }
+    if (answers && str_eq(reply, "opt_entity") == false
+        && str_eq(reply, "opt_vector") == false
+        && str_eq(reply, "text") == false && str_eq(reply, "json") == false
+        && reply_has_out(reply) == false) {
+        builder_str_value(out, "    held
+")
+    }
+    builder_str_value(out, "}
+
+")
+}
+
+// ---------------------------------------------------------------------------
+// The fixed part of the binding
+// ---------------------------------------------------------------------------
+
+PRELUDE :: "import \"mem.frost\"
+
+// An open engine window. It owns the renderer and the event loop, so every call
+// for one handle belongs to the thread that opened it.
+App :: distinct ^u8
+
+// An entity, which is a slot and the generation of what was in it. A handle to
+// a freed slot reads as stale rather than as whatever took its place.
+Entity :: struct { id: u32, generation: u32 }
+
+Vec3 :: struct { x: f32, y: f32, z: f32 }
+
+// What the engine hands back, under types that say who frees it. Each is
+// `linear`, so the compiler refuses a program that drops one, and the free that
+// consumes it is the one matching what it holds.
+Text :: linear struct { text: str, pointer: ^i8 }
+Entities :: linear struct { items: []Entity, pointer: ^Entity, count: i64 }
+Strings :: linear struct { pointer: ^^i8, count: i64 }
+Bytes :: linear struct { items: []u8, pointer: ^u8, count: i64 }
+
+// A run of NUL-terminated copies, for a call that takes several strings at
+// once. It owns both the copies and the array of pointers into them.
+CStrings :: struct { pointer: ^^i8, blocks: []^u8, count: i64 }
+
+ns_open :: extern fn() -> App
+ns_frame :: extern fn(app: App) -> bool
+ns_close :: extern fn(app: App)
+ns_free_string :: extern fn(text: ^i8)
+ns_free_entities :: extern fn(pointer: ^Entity, len: i64)
+ns_free_strings :: extern fn(pointer: ^^i8, len: i64)
+ns_free_bytes :: extern fn(pointer: ^u8, len: i64)
+
+// Opens a window with the default lit scene. Release it with `close`.
+open :: fn() -> App { unsafe { ns_open() } }
+
+// Advances one frame. False when the engine asks to exit, which is what a main
+// loop runs until.
+frame :: fn(app: App) -> bool { unsafe { ns_frame(app) } }
+
+close :: fn(app: App) { unsafe { ns_close(app) } }
+
+null_of :: fn($T: Type) -> ^T {
+    zero := 0
+    unsafe { ptr_cast($T, zero) }
+}
+
+// A NUL-terminated copy of a string, for the calls below. C reads one until a
+// NUL and a `str` has none, so the terminator is added here rather than
+// promised by every caller. The wrapper that made it frees it.
+c_string :: fn(text: str) -> ^u8 {
+    length := str_len(text)
+    block := heap_bytes(length + 1)
+    mut view := bytes_as($u8, block, length + 1)
+    mut index : i64 = 0
+    while (index < length) {
+        view[index] = text[index]
+        index = index + 1
+    }
+    view[length] = 0
+    block
+}
+
+// The same for several strings at once: a copy of each, and the array of
+// pointers C reads them through.
+c_strings :: fn(items: []str) -> CStrings {
+    count := slice_len(items)
+    mut blocks := heap_slice($^u8, count)
+    pointers := heap_array($^i8, count)
+    mut index : i64 = 0
+    while (index < count) {
+        blocks[index] = c_string(items[index])
+        unsafe { pointers[index] = ptr_cast($i8, blocks[index]) }
+        index = index + 1
+    }
+    CStrings { pointer = pointers, blocks = blocks, count = count }
+}
+
+c_strings_free :: fn(move held: CStrings) {
+    mut index : i64 = 0
+    while (index < held.count) {
+        heap_release($u8, held.blocks[index])
+        index = index + 1
+    }
+    heap_release_slice($^u8, held.blocks)
+    heap_release($^i8, held.pointer)
+}
+
+// Text the engine allocated, as a view of the bytes it owns.
+text_from :: fn(raw: ^i8) -> Text {
+    if (raw == null_of($i8)) {
+        return Text { text = \"\", pointer = raw }
+    }
+    mut length : i64 = 0
+    while (unsafe { raw[length] } != 0) {
+        length = length + 1
+    }
+    Text {
+        text = unsafe { slice_from($u8, ptr_cast($u8, raw), length) },
+        pointer = raw,
+    }
+}
+
+text_free :: fn(move held: Text) {
+    if (held.pointer != null_of($i8)) {
+        unsafe { ns_free_string(held.pointer) }
+    }
+}
+
+entities_from :: fn(pointer: ^Entity, count: i64) -> Entities {
+    Entities {
+        items = unsafe { slice_from($Entity, pointer, count) },
+        pointer = pointer,
+        count = count,
+    }
+}
+
+entities_free :: fn(move held: Entities) {
+    unsafe { ns_free_entities(held.pointer, held.count) }
+}
+
+bytes_from :: fn(pointer: ^u8, count: i64) -> Bytes {
+    Bytes {
+        items = unsafe { slice_from($u8, pointer, count) },
+        pointer = pointer,
+        count = count,
+    }
+}
+
+bytes_free :: fn(move held: Bytes) {
+    unsafe { ns_free_bytes(held.pointer, held.count) }
+}
+
+strings_from :: fn(pointer: ^^i8, count: i64) -> Strings {
+    Strings { pointer = pointer, count = count }
+}
+
+// One of the strings, as a view of the bytes C owns. It lasts until the run is
+// freed.
+strings_at :: fn(held: Strings, index: i64) -> str {
+    raw := unsafe { held.pointer[index] }
+    mut length : i64 = 0
+    while (unsafe { raw[length] } != 0) {
+        length = length + 1
+    }
+    unsafe { slice_from($u8, ptr_cast($u8, raw), length) }
+}
+
+strings_free :: fn(move held: Strings) {
+    unsafe { ns_free_strings(held.pointer, held.count) }
+}
+
+"
+
+// ---------------------------------------------------------------------------
+
+main :: fn() -> i64 {
+    read := fs_read(IDL)
+    if (read.ok == false) {
+        print_str_line("nightshade_bindgen: cannot read nightshade.json")
+        fs_free(read)
+        return 1
+    }
+
+    mut document := json_parse(read.text)
+    root := json_root(document)
+    if (root < 0) {
+        print_str_line("nightshade_bindgen: nightshade.json did not parse")
+        json_free(document)
+        fs_free(read)
+        return 1
+    }
+
+    manifest := json_member(document, root, "manifest")
+    schema := json_member(document, root, "command_schema")
+    if (manifest < 0 || schema < 0) {
+        print_str_line("nightshade_bindgen: no manifest or schema in the dump")
+        json_free(document)
+        fs_free(read)
+        return 1
+    }
+
+    base := read.buffer
+    mut types := vec_new($TypeInfo, 16)
+    collect_types(types, base, document, manifest, schema)
+
+    mut body := builder_new(262144)
+    mut names := builder_new(65536)
+    builder_str_value(names, "App, Entity, Vec3, Text, Entities, Strings, Bytes, ")
+    builder_str_value(names, "CStrings, open, frame, close, c_string, c_strings, ")
+    builder_str_value(names, "c_strings_free, null_of, text_from, ")
+    builder_str_value(names, "entities_from, entities_free, bytes_from, ")
+    builder_str_value(names, "bytes_free, strings_from, strings_at, strings_free, ")
+
+    held := vec_slice($TypeInfo, types)
+    mut index : i64 = 0
+    while (index < slice_len(held)) {
+        info := held[index]
+        if (info.kind == PLAIN_ENUM) {
+            emit_plain_enum(body, names, base, document, info)
+        }
+        if (info.kind == DATA_ENUM) {
+            emit_data_enum(body, names, base, document, info)
+        }
+        if (info.kind == WIRE) {
+            emit_wire(body, names, base, document, info)
+        }
+        index = index + 1
+    }
+
+    total := json_count(document, manifest)
+    mut command : i64 = 0
+    while (command < total) {
+        emit_command(body, names, base, document, types,
+            json_at(document, manifest, command))
+        command = command + 1
+    }
+
+    mut out := builder_new(1048576)
+    builder_str_value(out, "// Generated from nightshade.json by nightshade_bindgen.frost.
+// Do not edit. Run `just bindgen` instead.
+//
+// Every command the engine exposes, as an extern spelling the C ABI and a
+// wrapper under the name a program reads. A length crosses as an i64, which is
+// what C's uintptr_t is on the targets this builds for and what slice_len
+// answers with.
+
+")
+    builder_str_value(out, "export ")
+    builder_str_value(out, builder_str(names))
+    builder_str_value(out, "text_free
+
+")
+    builder_str_value(out, PRELUDE)
+    builder_str_value(out, builder_str(body))
+
+    wrote := fs_write(OUT, builder_str(out))
+    if (wrote == false) {
+        print_str_line("nightshade_bindgen: cannot write nightshade.frost")
+    } else {
+        print_str("types ")
+        print_int_line(slice_len(held))
+        print_str("commands ")
+        print_int_line(total)
+        print_str("bytes ")
+        print_int_line(builder_len(out))
+    }
+
+    builder_free(out)
+    builder_free(body)
+    builder_free(names)
+    vec_free($TypeInfo, types)
+    json_free(document)
+    fs_free(read)
+    if (wrote) { 0 } else { 1 }
+}

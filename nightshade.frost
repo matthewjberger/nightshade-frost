@@ -1,0 +1,2738 @@
+// Generated from nightshade.json by nightshade_bindgen.frost.
+// Do not edit. Run `just bindgen` instead.
+//
+// Every command the engine exposes, as an extern spelling the C ABI and a
+// wrapper under the name a program reads. A length crosses as an i64, which is
+// what C's uintptr_t is on the targets this builds for and what slice_len
+// answers with.
+
+export App, Entity, Vec3, Text, Entities, Strings, Bytes, CStrings, open, frame, close, c_string, c_strings, c_strings_free, null_of, text_from, entities_from, entities_free, bytes_from, bytes_free, strings_from, strings_at, strings_free, SHAPE_CUBE, SHAPE_SPHERE, SHAPE_CYLINDER, SHAPE_CONE, SHAPE_TORUS, SHAPE_PLANE, Body, BODY_NONE, BODY_STATIC, BODY_DYNAMIC, Background, BACKGROUND_SKY, BACKGROUND_CLOUDY_SKY, BACKGROUND_SPACE, BACKGROUND_NEBULA, BACKGROUND_SUNSET, BACKGROUND_COLOR, BACKGROUND_HDR, SCREEN_ANCHOR_TOP_LEFT, SCREEN_ANCHOR_TOP_CENTER, SCREEN_ANCHOR_TOP_RIGHT, SCREEN_ANCHOR_BOTTOM_LEFT, SCREEN_ANCHOR_BOTTOM_CENTER, SCREEN_ANCHOR_BOTTOM_RIGHT, SCREEN_ANCHOR_CENTER, TEXT_ALIGNMENT_LEFT, TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_RIGHT, AUDIO_BUS_MASTER, AUDIO_BUS_MUSIC, AUDIO_BUS_SFX, AUDIO_BUS_AMBIENT, AUDIO_BUS_VOICE, AUDIO_BUS_UI, InstanceWire, EmitterWire, RecastConfigWire, spawn_cube, spawn_sphere, spawn_cylinder, spawn_cone, spawn_plane, spawn_torus, spawn_floor, spawn_group, spawn_model, spawn_custom_mesh, register_prefab, spawn_prefab_named, spawn_object, set_color, set_metallic_roughness, set_emissive, set_unlit, set_texture, set_texture_tiling, set_normal_texture, set_metallic_roughness_texture, set_emissive_texture, set_occlusion_texture, set_position, set_scale, set_rotation, rotate, position, set_parent, set_visible, despawn, tag, untag, has_tag, query_tagged, point_light, spot_light, set_sun, set_background, show_grid, set_ambient, set_clear_color, set_bloom, set_bloom_intensity, set_ssao, set_ssr, set_ssgi, set_taa, set_exposure, set_color_grading, set_time_of_day, set_time_scale, time_scale, pause, unpause, set_paused, is_paused, emit_fire, emit_smoke, emit_burst, draw_cube, draw_sphere, draw_cylinder, draw_cone, draw_torus, draw_line, draw_text3d, spawn_label, spawn_text, set_text, set_text_color, set_text_size, spawn_panel, panel_label, panel_button, button_clicked, button_hovered, despawn_panel, panel_row, panel_grid, panel_scroll, set_scroll_offset, set_focus_order, focus_widget, spawn_panel_at, panel_text, panel_box, panel_button_at, set_panel_rect, set_panel_color, set_panel_text, set_panel_text_color, set_panel_selected, set_panel_visible, play_animation, play_animation_named, set_animation_looping, set_animation_speed, blend_to_animation, pause_animation, resume_animation, stop_animation, animation_clips, add_animation_event, add_animation_event_named, set_animation_layer_weight, clear_animation_layers, aim_at, orbit_camera, fly_camera, fixed_camera, look_at, set_orbit_focus, set_orbit_view, set_orbit_zoom, set_orbit_modifier, set_field_of_view, set_orthographic, set_perspective, camera_position, camera_forward, first_person, delta_time, elapsed_seconds, key_down, key_pressed, mouse_down, mouse_clicked, wasd, pointer_over_ui, mouse_scroll, mouse_delta, touch_count, touches, gamepad_button_down, gamepad_button_pressed, gamepad_axis, gamepad_left_stick, gamepad_right_stick, gamepad_connected, push, set_velocity, apply_force, apply_torque, set_angular_velocity, velocity, angular_velocity, make_sensor, overlap_sphere, set_collision_groups, set_friction, set_restitution, set_linear_damping, set_angular_damping, set_mass, set_gravity_scale, bake_navmesh, spawn_walker, walk_to, set_walk_speed, stop_walking, clicked_entity, entity_under_cursor, cursor_on_ground, spawn_world_panel, world_panel_button, world_panel_label, world_button_clicked, pause_sound, resume_sound, fade_volume, crossfade, set_bus_volume, duck_voice, directional_light, area_light, set_light_shadows, emit_sparks, emit_firework, emit_particles, set_alpha_blend, set_alpha_cutoff, set_double_sided, set_ior, set_transmission, set_clearcoat, set_anisotropy, set_uv_transform, set_sheen, set_iridescence, set_specular, set_normal_scale, set_occlusion_strength, set_emissive_strength, set_thickness, set_text_outline, set_morph_weight, set_window_title, lock_cursor, request_exit, set_render_layer, set_camera_layers, third_person_camera, spawn_cloth, reset_cloth, set_wind, pause_cutscene, resume_cutscene, stop_cutscene, seek_cutscene, set_cutscene_camera, bind_cutscene_actor, spawn_cylinder_body, spawn_capsule_body, set_controller_speed, set_controller_jump, is_grounded, load_texture, load_texture_linear, register_texture, list_materials, material, register_material, update_material, set_material_variant, spawn_objects, spawn_instanced, spawn_instanced_with_material, set_instances, spawn_cloth_sheet, blend_to_animation_named, add_animation_layer, name_entity, name, set_entity_name, children, descendants, roots, scene_tree, material_of, color, metallic_roughness, emissive, unlit, texture, describe_entity, set_text_alignment, set_morph_weights, morph_weight, morph_target_count, set_fog, set_fog_mode, set_depth_of_field, screenshot, set_shading_mode, animate_position, animate_scale, animate_color, shake_camera, reach_to, bounds, bounds_of, frame_entities, spawn_particle_emitter, set_emitter, spawn_decal, save_scene, load_scene, window_size, cursor_locked, frames_per_second, frame_count, uptime_milliseconds, bake_navmesh_with, raycast, attach_fixed, attach_hinge, attach_spring, attach_rope, controller_velocity, move_character, request_surface_pick, take_surface_pick, world_button_hovered, load_sound, play_sound, play_sound_looping, play_sound_at, set_volume, stop_sound, set_pitch, set_spatial_distance, panel_checkbox, checkbox_value, panel_slider, slider_value, set_slider_value, panel_text_input, text_input_changed, panel_dropdown, dropdown_selected, panel_progress_bar, set_progress, panel_toggle, toggle_value, panel_radio, radio_selected, panel_range_slider, set_range, panel_tabs, set_tab, panel_collapsing, panel_color_picker, color_value, panel_text_area, panel_text_area_with_value, set_text_area, panel_multi_select, set_multi_select, panel_date_picker, set_date, panel_menu, panel_color_picker_hsv, panel_splitter, panel_breadcrumb, panel_virtual_list, panel_table, panel_data_grid, set_data_grid_rows, set_data_grid_cell, data_grid_selection_changed, panel_command_palette, panel_property_grid, panel_property_row, panel_tree_view, tree_content, tree_node, tree_node_children, set_tree_node_expanded, tree_view_selected, panel_drag_value, drag_value, panel_selectable, panel_modal, panel_spinner, panel_separator, panel_heading, save_scene_to_file, load_scene_from_file, text_free
+
+import "mem.frost"
+
+// An open engine window. It owns the renderer and the event loop, so every call
+// for one handle belongs to the thread that opened it.
+App :: distinct ^u8
+
+// An entity, which is a slot and the generation of what was in it. A handle to
+// a freed slot reads as stale rather than as whatever took its place.
+Entity :: struct { id: u32, generation: u32 }
+
+Vec3 :: struct { x: f32, y: f32, z: f32 }
+
+// What the engine hands back, under types that say who frees it. Each is
+// `linear`, so the compiler refuses a program that drops one, and the free that
+// consumes it is the one matching what it holds.
+Text :: linear struct { text: str, pointer: ^i8 }
+Entities :: linear struct { items: []Entity, pointer: ^Entity, count: i64 }
+Strings :: linear struct { pointer: ^^i8, count: i64 }
+Bytes :: linear struct { items: []u8, pointer: ^u8, count: i64 }
+
+// A run of NUL-terminated copies, for a call that takes several strings at
+// once. It owns both the copies and the array of pointers into them.
+CStrings :: struct { pointer: ^^i8, blocks: []^u8, count: i64 }
+
+ns_open :: extern fn() -> App
+ns_frame :: extern fn(app: App) -> bool
+ns_close :: extern fn(app: App)
+ns_free_string :: extern fn(text: ^i8)
+ns_free_entities :: extern fn(pointer: ^Entity, len: i64)
+ns_free_strings :: extern fn(pointer: ^^i8, len: i64)
+ns_free_bytes :: extern fn(pointer: ^u8, len: i64)
+
+// Opens a window with the default lit scene. Release it with `close`.
+open :: fn() -> App { unsafe { ns_open() } }
+
+// Advances one frame. False when the engine asks to exit, which is what a main
+// loop runs until.
+frame :: fn(app: App) -> bool { unsafe { ns_frame(app) } }
+
+close :: fn(app: App) { unsafe { ns_close(app) } }
+
+null_of :: fn($T: Type) -> ^T {
+    zero := 0
+    unsafe { ptr_cast($T, zero) }
+}
+
+// A NUL-terminated copy of a string, for the calls below. C reads one until a
+// NUL and a `str` has none, so the terminator is added here rather than
+// promised by every caller. The wrapper that made it frees it.
+c_string :: fn(text: str) -> ^u8 {
+    length := str_len(text)
+    block := heap_bytes(length + 1)
+    mut view := bytes_as($u8, block, length + 1)
+    mut index : i64 = 0
+    while (index < length) {
+        view[index] = text[index]
+        index = index + 1
+    }
+    view[length] = 0
+    block
+}
+
+// The same for several strings at once: a copy of each, and the array of
+// pointers C reads them through.
+c_strings :: fn(items: []str) -> CStrings {
+    count := slice_len(items)
+    mut blocks := heap_slice($^u8, count)
+    pointers := heap_array($^i8, count)
+    mut index : i64 = 0
+    while (index < count) {
+        blocks[index] = c_string(items[index])
+        unsafe { pointers[index] = ptr_cast($i8, blocks[index]) }
+        index = index + 1
+    }
+    CStrings { pointer = pointers, blocks = blocks, count = count }
+}
+
+c_strings_free :: fn(move held: CStrings) {
+    mut index : i64 = 0
+    while (index < held.count) {
+        heap_release($u8, held.blocks[index])
+        index = index + 1
+    }
+    heap_release_slice($^u8, held.blocks)
+    heap_release($^i8, held.pointer)
+}
+
+// Text the engine allocated, as a view of the bytes it owns.
+text_from :: fn(raw: ^i8) -> Text {
+    if (raw == null_of($i8)) {
+        return Text { text = "", pointer = raw }
+    }
+    mut length : i64 = 0
+    while (unsafe { raw[length] } != 0) {
+        length = length + 1
+    }
+    Text {
+        text = unsafe { slice_from($u8, ptr_cast($u8, raw), length) },
+        pointer = raw,
+    }
+}
+
+text_free :: fn(move held: Text) {
+    if (held.pointer != null_of($i8)) {
+        unsafe { ns_free_string(held.pointer) }
+    }
+}
+
+entities_from :: fn(pointer: ^Entity, count: i64) -> Entities {
+    Entities {
+        items = unsafe { slice_from($Entity, pointer, count) },
+        pointer = pointer,
+        count = count,
+    }
+}
+
+entities_free :: fn(move held: Entities) {
+    unsafe { ns_free_entities(held.pointer, held.count) }
+}
+
+bytes_from :: fn(pointer: ^u8, count: i64) -> Bytes {
+    Bytes {
+        items = unsafe { slice_from($u8, pointer, count) },
+        pointer = pointer,
+        count = count,
+    }
+}
+
+bytes_free :: fn(move held: Bytes) {
+    unsafe { ns_free_bytes(held.pointer, held.count) }
+}
+
+strings_from :: fn(pointer: ^^i8, count: i64) -> Strings {
+    Strings { pointer = pointer, count = count }
+}
+
+// One of the strings, as a view of the bytes C owns. It lasts until the run is
+// freed.
+strings_at :: fn(held: Strings, index: i64) -> str {
+    raw := unsafe { held.pointer[index] }
+    mut length : i64 = 0
+    while (unsafe { raw[length] } != 0) {
+        length = length + 1
+    }
+    unsafe { slice_from($u8, ptr_cast($u8, raw), length) }
+}
+
+strings_free :: fn(move held: Strings) {
+    unsafe { ns_free_strings(held.pointer, held.count) }
+}
+
+SHAPE_CUBE :: 0
+SHAPE_SPHERE :: 1
+SHAPE_CYLINDER :: 2
+SHAPE_CONE :: 3
+SHAPE_TORUS :: 4
+SHAPE_PLANE :: 5
+
+Body :: struct { tag: u32, dynamic_mass: f32 }
+BODY_NONE :: 0
+BODY_STATIC :: 1
+BODY_DYNAMIC :: 2
+
+Background :: struct { tag: u32, color: [4]f32, hdr: ^u8, hdr_len: i64 }
+BACKGROUND_SKY :: 0
+BACKGROUND_CLOUDY_SKY :: 1
+BACKGROUND_SPACE :: 2
+BACKGROUND_NEBULA :: 3
+BACKGROUND_SUNSET :: 4
+BACKGROUND_COLOR :: 5
+BACKGROUND_HDR :: 6
+
+SCREEN_ANCHOR_TOP_LEFT :: 0
+SCREEN_ANCHOR_TOP_CENTER :: 1
+SCREEN_ANCHOR_TOP_RIGHT :: 2
+SCREEN_ANCHOR_BOTTOM_LEFT :: 3
+SCREEN_ANCHOR_BOTTOM_CENTER :: 4
+SCREEN_ANCHOR_BOTTOM_RIGHT :: 5
+SCREEN_ANCHOR_CENTER :: 6
+
+TEXT_ALIGNMENT_LEFT :: 0
+TEXT_ALIGNMENT_CENTER :: 1
+TEXT_ALIGNMENT_RIGHT :: 2
+
+AUDIO_BUS_MASTER :: 0
+AUDIO_BUS_MUSIC :: 1
+AUDIO_BUS_SFX :: 2
+AUDIO_BUS_AMBIENT :: 3
+AUDIO_BUS_VOICE :: 4
+AUDIO_BUS_UI :: 5
+
+InstanceWire :: struct { position: [3]f32, rotation: [4]f32, scale: [3]f32 }
+
+EmitterWire :: struct { burst_count: u32, color: [3]f32, drag: f32, gravity: [3]f32, lifetime: [2]f32, one_shot: bool, position: [3]f32, size: [2]f32, spawn_rate: f32 }
+
+RecastConfigWire :: struct { agent_height: f32, agent_radius: f32, cell_height_fraction: f32, cell_size_fraction: f32, detail_sample_dist: f32, detail_sample_max_error: f32, edge_max_len_factor: u32, max_simplification_error: f32, max_vertices_per_polygon: u32, merge_region_size: u32, min_region_size: u32, walkable_climb: f32, walkable_slope_angle: f32 }
+
+// Spawn a cube at the given position
+ns_spawn_cube :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_cube :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_cube(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a sphere at the given position
+ns_spawn_sphere :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_sphere :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_sphere(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a cylinder at the given position
+ns_spawn_cylinder :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_cylinder :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_cylinder(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a cone at the given position
+ns_spawn_cone :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_cone :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_cone(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a plane at the given position
+ns_spawn_plane :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_plane :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_plane(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a torus at the given position
+ns_spawn_torus :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_torus :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_torus(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a flat ground plane reaching the half extent in each direction
+ns_spawn_floor :: extern fn(app: App, half_extent: f32) -> Entity
+spawn_floor :: fn(app: App, half_extent: f32) -> Entity {
+    held := unsafe { ns_spawn_floor(app, half_extent) }
+    held
+}
+
+// Spawn an invisible group at a position for building hierarchies
+ns_spawn_group :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_group :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_group(app, position_x, position_y, position_z) }
+    held
+}
+
+// Spawn a glb model with its textures, materials, skins, and animations
+ns_spawn_model :: extern fn(app: App, glb: ^u8, glb_len: i64, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_model :: fn(app: App, glb: []u8, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    mut glb_ptr := null_of($u8)
+    if (slice_len(glb) > 0) {
+        glb_ptr = ptr_to(glb[0])
+    }
+    held := unsafe { ns_spawn_model(app, glb_ptr, slice_len(glb), position_x, position_y, position_z) }
+    held
+}
+
+// Spawn an entity rendering a mesh built from raw vertex data
+ns_spawn_custom_mesh :: extern fn(app: App, name: ^i8, positions: ^f32, positions_len: i64, normals: ^f32, normals_len: i64, uvs: ^f32, uvs_len: i64, indices: ^u32, indices_len: i64, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_custom_mesh :: fn(app: App, name: str, positions: []f32, normals: []f32, uvs: []f32, indices: []u32, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    name_held := c_string(name)
+    mut positions_ptr := null_of($f32)
+    if (slice_len(positions) > 0) {
+        positions_ptr = ptr_to(positions[0])
+    }
+    mut normals_ptr := null_of($f32)
+    if (slice_len(normals) > 0) {
+        normals_ptr = ptr_to(normals[0])
+    }
+    mut uvs_ptr := null_of($f32)
+    if (slice_len(uvs) > 0) {
+        uvs_ptr = ptr_to(uvs[0])
+    }
+    mut indices_ptr := null_of($u32)
+    if (slice_len(indices) > 0) {
+        indices_ptr = ptr_to(indices[0])
+    }
+    held := unsafe { ns_spawn_custom_mesh(app, ptr_cast($i8, name_held), positions_ptr, slice_len(positions), normals_ptr, slice_len(normals), uvs_ptr, slice_len(uvs), indices_ptr, slice_len(indices), position_x, position_y, position_z) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Capture an entity subtree as a named reusable prefab
+ns_register_prefab :: extern fn(app: App, name: ^i8, value root: Entity) -> bool
+register_prefab :: fn(app: App, name: str, root: Entity) -> bool {
+    name_held := c_string(name)
+    held := unsafe { ns_register_prefab(app, ptr_cast($i8, name_held), root) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Stamp a copy of a named prefab at a position
+ns_spawn_prefab_named :: extern fn(app: App, name: ^i8, position_x: f32, position_y: f32, position_z: f32, out_len: ^i64) -> ^Entity
+spawn_prefab_named :: fn(app: App, name: str, position_x: f32, position_y: f32, position_z: f32) -> Entities {
+    name_held := c_string(name)
+    mut out_len : i64 = 0
+    held := unsafe { ns_spawn_prefab_named(app, ptr_cast($i8, name_held), position_x, position_y, position_z, ptr_to(out_len)) }
+    heap_release($u8, name_held)
+    entities_from(held, out_len)
+}
+
+// Spawn an object with mesh, color, and optional physics body in one call
+ns_spawn_object :: extern fn(app: App, shape: u32, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, value body: Body) -> Entity
+spawn_object :: fn(app: App, shape: u32, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, body: Body) -> Entity {
+    held := unsafe { ns_spawn_object(app, shape, position_x, position_y, position_z, scale_x, scale_y, scale_z, color_x, color_y, color_z, color_w, body) }
+    held
+}
+
+// Set the entity's base color as linear RGBA
+ns_set_color :: extern fn(app: App, value entity: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_color :: fn(app: App, entity: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_color(app, entity, color_x, color_y, color_z, color_w) }
+}
+
+// Set the entity's metallic and roughness factors
+ns_set_metallic_roughness :: extern fn(app: App, value entity: Entity, metallic: f32, roughness: f32)
+set_metallic_roughness :: fn(app: App, entity: Entity, metallic: f32, roughness: f32) {
+    unsafe { ns_set_metallic_roughness(app, entity, metallic, roughness) }
+}
+
+// Make the entity glow with the given color and strength
+ns_set_emissive :: extern fn(app: App, value entity: Entity, color_x: f32, color_y: f32, color_z: f32, strength: f32)
+set_emissive :: fn(app: App, entity: Entity, color_x: f32, color_y: f32, color_z: f32, strength: f32) {
+    unsafe { ns_set_emissive(app, entity, color_x, color_y, color_z, strength) }
+}
+
+// Disable lighting on the entity so its color renders as is
+ns_set_unlit :: extern fn(app: App, value entity: Entity, unlit: bool)
+set_unlit :: fn(app: App, entity: Entity, unlit: bool) {
+    unsafe { ns_set_unlit(app, entity, unlit) }
+}
+
+// Set the entity's base color texture by name
+ns_set_texture :: extern fn(app: App, value entity: Entity, texture: ^i8)
+set_texture :: fn(app: App, entity: Entity, texture: str) {
+    texture_held := c_string(texture)
+    unsafe { ns_set_texture(app, entity, ptr_cast($i8, texture_held)) }
+    heap_release($u8, texture_held)
+}
+
+// Tile the entity's base color texture the given number of times per axis
+ns_set_texture_tiling :: extern fn(app: App, value entity: Entity, repeats: f32)
+set_texture_tiling :: fn(app: App, entity: Entity, repeats: f32) {
+    unsafe { ns_set_texture_tiling(app, entity, repeats) }
+}
+
+// Set the entity's normal map by texture name
+ns_set_normal_texture :: extern fn(app: App, value entity: Entity, texture: ^i8)
+set_normal_texture :: fn(app: App, entity: Entity, texture: str) {
+    texture_held := c_string(texture)
+    unsafe { ns_set_normal_texture(app, entity, ptr_cast($i8, texture_held)) }
+    heap_release($u8, texture_held)
+}
+
+// Set the entity's metallic and roughness map by texture name
+ns_set_metallic_roughness_texture :: extern fn(app: App, value entity: Entity, texture: ^i8)
+set_metallic_roughness_texture :: fn(app: App, entity: Entity, texture: str) {
+    texture_held := c_string(texture)
+    unsafe { ns_set_metallic_roughness_texture(app, entity, ptr_cast($i8, texture_held)) }
+    heap_release($u8, texture_held)
+}
+
+// Set the entity's emissive map by texture name
+ns_set_emissive_texture :: extern fn(app: App, value entity: Entity, texture: ^i8)
+set_emissive_texture :: fn(app: App, entity: Entity, texture: str) {
+    texture_held := c_string(texture)
+    unsafe { ns_set_emissive_texture(app, entity, ptr_cast($i8, texture_held)) }
+    heap_release($u8, texture_held)
+}
+
+// Set the entity's ambient occlusion map by texture name
+ns_set_occlusion_texture :: extern fn(app: App, value entity: Entity, texture: ^i8)
+set_occlusion_texture :: fn(app: App, entity: Entity, texture: str) {
+    texture_held := c_string(texture)
+    unsafe { ns_set_occlusion_texture(app, entity, ptr_cast($i8, texture_held)) }
+    heap_release($u8, texture_held)
+}
+
+// Set the entity's position in its parent's space
+ns_set_position :: extern fn(app: App, value entity: Entity, position_x: f32, position_y: f32, position_z: f32)
+set_position :: fn(app: App, entity: Entity, position_x: f32, position_y: f32, position_z: f32) {
+    unsafe { ns_set_position(app, entity, position_x, position_y, position_z) }
+}
+
+// Set the entity's scale
+ns_set_scale :: extern fn(app: App, value entity: Entity, scale_x: f32, scale_y: f32, scale_z: f32)
+set_scale :: fn(app: App, entity: Entity, scale_x: f32, scale_y: f32, scale_z: f32) {
+    unsafe { ns_set_scale(app, entity, scale_x, scale_y, scale_z) }
+}
+
+// Replace the entity's rotation with the given angle around an axis
+ns_set_rotation :: extern fn(app: App, value entity: Entity, axis_x: f32, axis_y: f32, axis_z: f32, radians: f32)
+set_rotation :: fn(app: App, entity: Entity, axis_x: f32, axis_y: f32, axis_z: f32, radians: f32) {
+    unsafe { ns_set_rotation(app, entity, axis_x, axis_y, axis_z, radians) }
+}
+
+// Rotate the entity around an axis on top of its current rotation
+ns_rotate :: extern fn(app: App, value entity: Entity, axis_x: f32, axis_y: f32, axis_z: f32, radians: f32)
+rotate :: fn(app: App, entity: Entity, axis_x: f32, axis_y: f32, axis_z: f32, radians: f32) {
+    unsafe { ns_rotate(app, entity, axis_x, axis_y, axis_z, radians) }
+}
+
+// Get the entity's position in world space
+ns_position :: extern fn(app: App, value entity: Entity) -> Vec3
+position :: fn(app: App, entity: Entity) -> Vec3 {
+    held := unsafe { ns_position(app, entity) }
+    held
+}
+
+// Parent a child to a parent or unparent it, keeping its world position
+ns_set_parent :: extern fn(app: App, value child: Entity, value parent: Entity, parent_present: bool)
+set_parent :: fn(app: App, child: Entity, parent: Entity, parent_present: bool) {
+    unsafe { ns_set_parent(app, child, parent, parent_present) }
+}
+
+// Show or hide the entity without despawning it
+ns_set_visible :: extern fn(app: App, value entity: Entity, visible: bool)
+set_visible :: fn(app: App, entity: Entity, visible: bool) {
+    unsafe { ns_set_visible(app, entity, visible) }
+}
+
+// Despawn the entity and its descendants
+ns_despawn :: extern fn(app: App, value entity: Entity)
+despawn :: fn(app: App, entity: Entity) {
+    unsafe { ns_despawn(app, entity) }
+}
+
+// Tag the entity with a label
+ns_tag :: extern fn(app: App, value entity: Entity, label: ^i8)
+tag :: fn(app: App, entity: Entity, label: str) {
+    label_held := c_string(label)
+    unsafe { ns_tag(app, entity, ptr_cast($i8, label_held)) }
+    heap_release($u8, label_held)
+}
+
+// Remove a label from the entity
+ns_untag :: extern fn(app: App, value entity: Entity, label: ^i8)
+untag :: fn(app: App, entity: Entity, label: str) {
+    label_held := c_string(label)
+    unsafe { ns_untag(app, entity, ptr_cast($i8, label_held)) }
+    heap_release($u8, label_held)
+}
+
+// Check whether the entity carries the label
+ns_has_tag :: extern fn(app: App, value entity: Entity, label: ^i8) -> bool
+has_tag :: fn(app: App, entity: Entity, label: str) -> bool {
+    label_held := c_string(label)
+    held := unsafe { ns_has_tag(app, entity, ptr_cast($i8, label_held)) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Get every entity carrying the label
+ns_query_tagged :: extern fn(app: App, label: ^i8, out_len: ^i64) -> ^Entity
+query_tagged :: fn(app: App, label: str) -> Entities {
+    label_held := c_string(label)
+    mut out_len : i64 = 0
+    held := unsafe { ns_query_tagged(app, ptr_cast($i8, label_held), ptr_to(out_len)) }
+    heap_release($u8, label_held)
+    entities_from(held, out_len)
+}
+
+// Add a point light at the given position
+ns_point_light :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity
+point_light :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity {
+    held := unsafe { ns_point_light(app, position_x, position_y, position_z, color_x, color_y, color_z, intensity) }
+    held
+}
+
+// Add a shadow casting spot light aimed at a target
+ns_spot_light :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, target_x: f32, target_y: f32, target_z: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity
+spot_light :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, target_x: f32, target_y: f32, target_z: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity {
+    held := unsafe { ns_spot_light(app, position_x, position_y, position_z, target_x, target_y, target_z, color_x, color_y, color_z, intensity) }
+    held
+}
+
+// Adjust the default sun's color and intensity
+ns_set_sun :: extern fn(app: App, color_x: f32, color_y: f32, color_z: f32, intensity: f32)
+set_sun :: fn(app: App, color_x: f32, color_y: f32, color_z: f32, intensity: f32) {
+    unsafe { ns_set_sun(app, color_x, color_y, color_z, intensity) }
+}
+
+// Set the scene background
+ns_set_background :: extern fn(app: App, value background: Background)
+set_background :: fn(app: App, background: Background) {
+    unsafe { ns_set_background(app, background) }
+}
+
+// Show or hide the reference grid
+ns_show_grid :: extern fn(app: App, enabled: bool)
+show_grid :: fn(app: App, enabled: bool) {
+    unsafe { ns_show_grid(app, enabled) }
+}
+
+// Set the ambient light color as linear RGBA
+ns_set_ambient :: extern fn(app: App, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_ambient :: fn(app: App, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_ambient(app, color_x, color_y, color_z, color_w) }
+}
+
+// Set the background clear color as linear RGBA
+ns_set_clear_color :: extern fn(app: App, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_clear_color :: fn(app: App, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_clear_color(app, color_x, color_y, color_z, color_w) }
+}
+
+// Toggle bloom
+ns_set_bloom :: extern fn(app: App, enabled: bool)
+set_bloom :: fn(app: App, enabled: bool) {
+    unsafe { ns_set_bloom(app, enabled) }
+}
+
+// Set the bloom strength
+ns_set_bloom_intensity :: extern fn(app: App, intensity: f32)
+set_bloom_intensity :: fn(app: App, intensity: f32) {
+    unsafe { ns_set_bloom_intensity(app, intensity) }
+}
+
+// Toggle screen-space ambient occlusion
+ns_set_ssao :: extern fn(app: App, enabled: bool)
+set_ssao :: fn(app: App, enabled: bool) {
+    unsafe { ns_set_ssao(app, enabled) }
+}
+
+// Toggle screen-space reflections on glossy surfaces
+ns_set_ssr :: extern fn(app: App, enabled: bool)
+set_ssr :: fn(app: App, enabled: bool) {
+    unsafe { ns_set_ssr(app, enabled) }
+}
+
+// Toggle screen-space global illumination
+ns_set_ssgi :: extern fn(app: App, enabled: bool)
+set_ssgi :: fn(app: App, enabled: bool) {
+    unsafe { ns_set_ssgi(app, enabled) }
+}
+
+// Toggle temporal antialiasing
+ns_set_taa :: extern fn(app: App, enabled: bool)
+set_taa :: fn(app: App, enabled: bool) {
+    unsafe { ns_set_taa(app, enabled) }
+}
+
+// Set the manual exposure multiplier
+ns_set_exposure :: extern fn(app: App, exposure: f32)
+set_exposure :: fn(app: App, exposure: f32) {
+    unsafe { ns_set_exposure(app, exposure) }
+}
+
+// Set saturation, contrast, and brightness color grading
+ns_set_color_grading :: extern fn(app: App, saturation: f32, contrast: f32, brightness: f32)
+set_color_grading :: fn(app: App, saturation: f32, contrast: f32, brightness: f32) {
+    unsafe { ns_set_color_grading(app, saturation, contrast, brightness) }
+}
+
+// Set the hour of the day from 0 to 24
+ns_set_time_of_day :: extern fn(app: App, hour: f32)
+set_time_of_day :: fn(app: App, hour: f32) {
+    unsafe { ns_set_time_of_day(app, hour) }
+}
+
+// Set the global time scale: 0.5 for slow motion, 2.0 for fast forward
+ns_set_time_scale :: extern fn(app: App, scale: f32)
+set_time_scale :: fn(app: App, scale: f32) {
+    unsafe { ns_set_time_scale(app, scale) }
+}
+
+// Get the current global time scale
+ns_time_scale :: extern fn(app: App) -> f32
+time_scale :: fn(app: App) -> f32 {
+    held := unsafe { ns_time_scale(app) }
+    held
+}
+
+// Pause game time so scaled delta time reports zero
+ns_pause :: extern fn(app: App)
+pause :: fn(app: App) {
+    unsafe { ns_pause(app) }
+}
+
+// Resume game time after a pause
+ns_unpause :: extern fn(app: App)
+unpause :: fn(app: App) {
+    unsafe { ns_unpause(app) }
+}
+
+// Set whether game time is paused
+ns_set_paused :: extern fn(app: App, paused: bool)
+set_paused :: fn(app: App, paused: bool) {
+    unsafe { ns_set_paused(app, paused) }
+}
+
+// Whether game time is currently paused
+ns_is_paused :: extern fn(app: App) -> bool
+is_paused :: fn(app: App) -> bool {
+    held := unsafe { ns_is_paused(app) }
+    held
+}
+
+// Emit a continuous fire at the given position
+ns_emit_fire :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+emit_fire :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_emit_fire(app, position_x, position_y, position_z) }
+    held
+}
+
+// Emit a continuous smoke column at the given position
+ns_emit_smoke :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+emit_smoke :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_emit_smoke(app, position_x, position_y, position_z) }
+    held
+}
+
+// Emit a one-shot burst of colored particles at the given position
+ns_emit_burst :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, count: u32) -> Entity
+emit_burst :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, count: u32) -> Entity {
+    held := unsafe { ns_emit_burst(app, position_x, position_y, position_z, color_x, color_y, color_z, color_w, count) }
+    held
+}
+
+// Draw a cube with the given size and color for one frame
+ns_draw_cube :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+draw_cube :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_draw_cube(app, position_x, position_y, position_z, scale_x, scale_y, scale_z, color_x, color_y, color_z, color_w) }
+}
+
+// Draw a sphere with the given radius and color for one frame
+ns_draw_sphere :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, radius: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+draw_sphere :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, radius: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_draw_sphere(app, position_x, position_y, position_z, radius, color_x, color_y, color_z, color_w) }
+}
+
+// Draw an upright cylinder with the given size and color for one frame
+ns_draw_cylinder :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+draw_cylinder :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_draw_cylinder(app, position_x, position_y, position_z, scale_x, scale_y, scale_z, color_x, color_y, color_z, color_w) }
+}
+
+// Draw an upright cone with the given size and color for one frame
+ns_draw_cone :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+draw_cone :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_draw_cone(app, position_x, position_y, position_z, scale_x, scale_y, scale_z, color_x, color_y, color_z, color_w) }
+}
+
+// Draw a flat torus with the given size and color for one frame
+ns_draw_torus :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+draw_torus :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_draw_torus(app, position_x, position_y, position_z, scale_x, scale_y, scale_z, color_x, color_y, color_z, color_w) }
+}
+
+// Draw a line from start to end for one frame
+ns_draw_line :: extern fn(app: App, start_x: f32, start_y: f32, start_z: f32, end_x: f32, end_y: f32, end_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+draw_line :: fn(app: App, start_x: f32, start_y: f32, start_z: f32, end_x: f32, end_y: f32, end_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_draw_line(app, start_x, start_y, start_z, end_x, end_y, end_z, color_x, color_y, color_z, color_w) }
+}
+
+// Draw billboard text at a 3d position for one frame
+ns_draw_text3d :: extern fn(app: App, text: ^i8, position_x: f32, position_y: f32, position_z: f32)
+draw_text3d :: fn(app: App, text: str, position_x: f32, position_y: f32, position_z: f32) {
+    text_held := c_string(text)
+    unsafe { ns_draw_text3d(app, ptr_cast($i8, text_held), position_x, position_y, position_z) }
+    heap_release($u8, text_held)
+}
+
+// Spawn 3d text at a position that always faces the camera
+ns_spawn_label :: extern fn(app: App, text: ^i8, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_label :: fn(app: App, text: str, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_spawn_label(app, ptr_cast($i8, text_held), position_x, position_y, position_z) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Spawn screen text at the given anchor
+ns_spawn_text :: extern fn(app: App, text: ^i8, anchor: u32) -> Entity
+spawn_text :: fn(app: App, text: str, anchor: u32) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_spawn_text(app, ptr_cast($i8, text_held), anchor) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Replace the content of a text entity
+ns_set_text :: extern fn(app: App, value entity: Entity, text: ^i8)
+set_text :: fn(app: App, entity: Entity, text: str) {
+    text_held := c_string(text)
+    unsafe { ns_set_text(app, entity, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+}
+
+// Set a text entity's color as linear RGBA
+ns_set_text_color :: extern fn(app: App, value entity: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_text_color :: fn(app: App, entity: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_text_color(app, entity, color_x, color_y, color_z, color_w) }
+}
+
+// Set a text entity's font size
+ns_set_text_size :: extern fn(app: App, value entity: Entity, size: f32)
+set_text_size :: fn(app: App, entity: Entity, size: f32) {
+    unsafe { ns_set_text_size(app, entity, size) }
+}
+
+// Spawn an empty panel anchored to a window corner or center, sized in pixels
+ns_spawn_panel :: extern fn(app: App, anchor: u32, width: f32, height: f32) -> Entity
+spawn_panel :: fn(app: App, anchor: u32, width: f32, height: f32) -> Entity {
+    held := unsafe { ns_spawn_panel(app, anchor, width, height) }
+    held
+}
+
+// Add a line of text to a panel
+ns_panel_label :: extern fn(app: App, value panel: Entity, text: ^i8) -> Entity
+panel_label :: fn(app: App, panel: Entity, text: str) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_panel_label(app, panel, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Add a themed button to a panel
+ns_panel_button :: extern fn(app: App, value panel: Entity, text: ^i8) -> Entity
+panel_button :: fn(app: App, panel: Entity, text: str) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_panel_button(app, panel, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Check whether the button was clicked this frame
+ns_button_clicked :: extern fn(app: App, value button: Entity) -> bool
+button_clicked :: fn(app: App, button: Entity) -> bool {
+    held := unsafe { ns_button_clicked(app, button) }
+    held
+}
+
+// Check whether the pointer is over the button
+ns_button_hovered :: extern fn(app: App, value button: Entity) -> bool
+button_hovered :: fn(app: App, button: Entity) -> bool {
+    held := unsafe { ns_button_hovered(app, button) }
+    held
+}
+
+// Remove a panel and everything in it
+ns_despawn_panel :: extern fn(app: App, value panel: Entity)
+despawn_panel :: fn(app: App, panel: Entity) {
+    unsafe { ns_despawn_panel(app, panel) }
+}
+
+// Add a horizontal row to a panel
+ns_panel_row :: extern fn(app: App, value panel: Entity, height: f32) -> Entity
+panel_row :: fn(app: App, panel: Entity, height: f32) -> Entity {
+    held := unsafe { ns_panel_row(app, panel, height) }
+    held
+}
+
+// Add a fixed-column grid to a panel
+ns_panel_grid :: extern fn(app: App, value panel: Entity, columns: i64, row_height: f32, height: f32) -> Entity
+panel_grid :: fn(app: App, panel: Entity, columns: i64, row_height: f32, height: f32) -> Entity {
+    held := unsafe { ns_panel_grid(app, panel, columns, row_height, height) }
+    held
+}
+
+// Add a scrollable region to a panel and return its content container
+ns_panel_scroll :: extern fn(app: App, value panel: Entity, height: f32) -> Entity
+panel_scroll :: fn(app: App, panel: Entity, height: f32) -> Entity {
+    held := unsafe { ns_panel_scroll(app, panel, height) }
+    held
+}
+
+// Scroll a panel-scroll region to a pixel offset from the top
+ns_set_scroll_offset :: extern fn(app: App, value scroll_area: Entity, offset: f32)
+set_scroll_offset :: fn(app: App, scroll_area: Entity, offset: f32) {
+    unsafe { ns_set_scroll_offset(app, scroll_area, offset) }
+}
+
+// Set a widget's keyboard focus order
+ns_set_focus_order :: extern fn(app: App, value entity: Entity, order: i32)
+set_focus_order :: fn(app: App, entity: Entity, order: i32) {
+    unsafe { ns_set_focus_order(app, entity, order) }
+}
+
+// Give keyboard focus to a widget immediately
+ns_focus_widget :: extern fn(app: App, value entity: Entity)
+focus_widget :: fn(app: App, entity: Entity) {
+    unsafe { ns_focus_widget(app, entity) }
+}
+
+// Spawn a panel at any of the nine screen positions with a pixel offset and size
+ns_spawn_panel_at :: extern fn(app: App, anchor: u32, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+spawn_panel_at :: fn(app: App, anchor: u32, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    held := unsafe { ns_spawn_panel_at(app, anchor, offset_x, offset_y, size_x, size_y, color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Add a text label to a parent in a pixel rectangle with alignment
+ns_panel_text :: extern fn(app: App, value parent: Entity, text: ^i8, rect_x: f32, rect_y: f32, rect_z: f32, rect_w: f32, font_size: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, align: u32) -> Entity
+panel_text :: fn(app: App, parent: Entity, text: str, rect_x: f32, rect_y: f32, rect_z: f32, rect_w: f32, font_size: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, align: u32) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_panel_text(app, parent, ptr_cast($i8, text_held), rect_x, rect_y, rect_z, rect_w, font_size, color_x, color_y, color_z, color_w, align) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Add a solid colored rectangle to a parent at a pixel offset and size
+ns_panel_box :: extern fn(app: App, value parent: Entity, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+panel_box :: fn(app: App, parent: Entity, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    held := unsafe { ns_panel_box(app, parent, offset_x, offset_y, size_x, size_y, color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Add an interactive button to a parent at a pixel offset and size
+ns_panel_button_at :: extern fn(app: App, value parent: Entity, label: ^i8, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32) -> Entity
+panel_button_at :: fn(app: App, parent: Entity, label: str, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32) -> Entity {
+    label_held := c_string(label)
+    held := unsafe { ns_panel_button_at(app, parent, ptr_cast($i8, label_held), offset_x, offset_y, size_x, size_y) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Reposition and resize a UI node within its parent, in pixels
+ns_set_panel_rect :: extern fn(app: App, value node: Entity, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32)
+set_panel_rect :: fn(app: App, node: Entity, offset_x: f32, offset_y: f32, size_x: f32, size_y: f32) {
+    unsafe { ns_set_panel_rect(app, node, offset_x, offset_y, size_x, size_y) }
+}
+
+// Set a UI node's background color as linear RGBA
+ns_set_panel_color :: extern fn(app: App, value node: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_panel_color :: fn(app: App, node: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_panel_color(app, node, color_x, color_y, color_z, color_w) }
+}
+
+// Replace a panel text label's content
+ns_set_panel_text :: extern fn(app: App, value label: Entity, text: ^i8)
+set_panel_text :: fn(app: App, label: Entity, text: str) {
+    text_held := c_string(text)
+    unsafe { ns_set_panel_text(app, label, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+}
+
+// Recolor a panel text label
+ns_set_panel_text_color :: extern fn(app: App, value label: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_panel_text_color :: fn(app: App, label: Entity, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_panel_text_color(app, label, color_x, color_y, color_z, color_w) }
+}
+
+// Toggle a button's selected highlight with an accent tint
+ns_set_panel_selected :: extern fn(app: App, value button: Entity, selected: bool, accent_x: f32, accent_y: f32, accent_z: f32, accent_w: f32)
+set_panel_selected :: fn(app: App, button: Entity, selected: bool, accent_x: f32, accent_y: f32, accent_z: f32, accent_w: f32) {
+    unsafe { ns_set_panel_selected(app, button, selected, accent_x, accent_y, accent_z, accent_w) }
+}
+
+// Show or hide a UI node and its children
+ns_set_panel_visible :: extern fn(app: App, value node: Entity, visible: bool)
+set_panel_visible :: fn(app: App, node: Entity, visible: bool) {
+    unsafe { ns_set_panel_visible(app, node, visible) }
+}
+
+// Start playing the model's animation clip at the given index
+ns_play_animation :: extern fn(app: App, value entity: Entity, clip: i64)
+play_animation :: fn(app: App, entity: Entity, clip: i64) {
+    unsafe { ns_play_animation(app, entity, clip) }
+}
+
+// Play the animation clip with the given name
+ns_play_animation_named :: extern fn(app: App, value entity: Entity, name: ^i8) -> bool
+play_animation_named :: fn(app: App, entity: Entity, name: str) -> bool {
+    name_held := c_string(name)
+    held := unsafe { ns_play_animation_named(app, entity, ptr_cast($i8, name_held)) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Set whether the entity's current animation repeats
+ns_set_animation_looping :: extern fn(app: App, value entity: Entity, looping: bool)
+set_animation_looping :: fn(app: App, entity: Entity, looping: bool) {
+    unsafe { ns_set_animation_looping(app, entity, looping) }
+}
+
+// Set the playback speed of the entity's animation
+ns_set_animation_speed :: extern fn(app: App, value entity: Entity, speed: f32)
+set_animation_speed :: fn(app: App, entity: Entity, speed: f32) {
+    unsafe { ns_set_animation_speed(app, entity, speed) }
+}
+
+// Cross-fade from the current clip to another over the given seconds
+ns_blend_to_animation :: extern fn(app: App, value entity: Entity, clip: i64, seconds: f32)
+blend_to_animation :: fn(app: App, entity: Entity, clip: i64, seconds: f32) {
+    unsafe { ns_blend_to_animation(app, entity, clip, seconds) }
+}
+
+// Pause the entity's animation at the current frame
+ns_pause_animation :: extern fn(app: App, value entity: Entity)
+pause_animation :: fn(app: App, entity: Entity) {
+    unsafe { ns_pause_animation(app, entity) }
+}
+
+// Resume a paused animation from where it left off
+ns_resume_animation :: extern fn(app: App, value entity: Entity)
+resume_animation :: fn(app: App, entity: Entity) {
+    unsafe { ns_resume_animation(app, entity) }
+}
+
+// Stop the entity's animation and reset it to the first frame
+ns_stop_animation :: extern fn(app: App, value entity: Entity)
+stop_animation :: fn(app: App, entity: Entity) {
+    unsafe { ns_stop_animation(app, entity) }
+}
+
+// Get the names of the entity's animation clips in index order
+ns_animation_clips :: extern fn(app: App, value entity: Entity, out_len: ^i64) -> ^^i8
+animation_clips :: fn(app: App, entity: Entity) -> Strings {
+    mut out_len : i64 = 0
+    held := unsafe { ns_animation_clips(app, entity, ptr_to(out_len)) }
+    strings_from(held, out_len)
+}
+
+// Add a named marker at a time on the clip at the given index
+ns_add_animation_event :: extern fn(app: App, value entity: Entity, clip_index: i64, time: f32, name: ^i8) -> bool
+add_animation_event :: fn(app: App, entity: Entity, clip_index: i64, time: f32, name: str) -> bool {
+    name_held := c_string(name)
+    held := unsafe { ns_add_animation_event(app, entity, clip_index, time, ptr_cast($i8, name_held)) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Add a named marker at a time on the clip with the given name
+ns_add_animation_event_named :: extern fn(app: App, value entity: Entity, clip_name: ^i8, time: f32, name: ^i8) -> bool
+add_animation_event_named :: fn(app: App, entity: Entity, clip_name: str, time: f32, name: str) -> bool {
+    clip_name_held := c_string(clip_name)
+    name_held := c_string(name)
+    held := unsafe { ns_add_animation_event_named(app, entity, ptr_cast($i8, clip_name_held), time, ptr_cast($i8, name_held)) }
+    heap_release($u8, clip_name_held)
+    heap_release($u8, name_held)
+    held
+}
+
+// Set the blend weight of an animation layer
+ns_set_animation_layer_weight :: extern fn(app: App, value entity: Entity, layer_index: i64, weight: f32)
+set_animation_layer_weight :: fn(app: App, entity: Entity, layer_index: i64, weight: f32) {
+    unsafe { ns_set_animation_layer_weight(app, entity, layer_index, weight) }
+}
+
+// Remove every animation layer, leaving only the base animation
+ns_clear_animation_layers :: extern fn(app: App, value entity: Entity)
+clear_animation_layers :: fn(app: App, entity: Entity) {
+    unsafe { ns_clear_animation_layers(app, entity) }
+}
+
+// Point a bone's forward axis at a world target, recomputed each frame
+ns_aim_at :: extern fn(app: App, value bone: Entity, target_x: f32, target_y: f32, target_z: f32, forward_x: f32, forward_y: f32, forward_z: f32)
+aim_at :: fn(app: App, bone: Entity, target_x: f32, target_y: f32, target_z: f32, forward_x: f32, forward_y: f32, forward_z: f32) {
+    unsafe { ns_aim_at(app, bone, target_x, target_y, target_z, forward_x, forward_y, forward_z) }
+}
+
+// Add an orbit camera focused on a point at the given radius
+ns_orbit_camera :: extern fn(app: App, focus_x: f32, focus_y: f32, focus_z: f32, radius: f32) -> Entity
+orbit_camera :: fn(app: App, focus_x: f32, focus_y: f32, focus_z: f32, radius: f32) -> Entity {
+    held := unsafe { ns_orbit_camera(app, focus_x, focus_y, focus_z, radius) }
+    held
+}
+
+// Add a free-flying camera at the given position
+ns_fly_camera :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+fly_camera :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_fly_camera(app, position_x, position_y, position_z) }
+    held
+}
+
+// Add a stationary camera at an eye looking at a target
+ns_fixed_camera :: extern fn(app: App, eye_x: f32, eye_y: f32, eye_z: f32, target_x: f32, target_y: f32, target_z: f32) -> Entity
+fixed_camera :: fn(app: App, eye_x: f32, eye_y: f32, eye_z: f32, target_x: f32, target_y: f32, target_z: f32) -> Entity {
+    held := unsafe { ns_fixed_camera(app, eye_x, eye_y, eye_z, target_x, target_y, target_z) }
+    held
+}
+
+// Repoint the active camera to look at a target from an eye
+ns_look_at :: extern fn(app: App, eye_x: f32, eye_y: f32, eye_z: f32, target_x: f32, target_y: f32, target_z: f32)
+look_at :: fn(app: App, eye_x: f32, eye_y: f32, eye_z: f32, target_x: f32, target_y: f32, target_z: f32) {
+    unsafe { ns_look_at(app, eye_x, eye_y, eye_z, target_x, target_y, target_z) }
+}
+
+// Move the orbit camera's focus point
+ns_set_orbit_focus :: extern fn(app: App, focus_x: f32, focus_y: f32, focus_z: f32)
+set_orbit_focus :: fn(app: App, focus_x: f32, focus_y: f32, focus_z: f32) {
+    unsafe { ns_set_orbit_focus(app, focus_x, focus_y, focus_z) }
+}
+
+// Set the orbit camera's focus, distance, yaw, and pitch at once
+ns_set_orbit_view :: extern fn(app: App, focus_x: f32, focus_y: f32, focus_z: f32, radius: f32, yaw: f32, pitch: f32)
+set_orbit_view :: fn(app: App, focus_x: f32, focus_y: f32, focus_z: f32, radius: f32, yaw: f32, pitch: f32) {
+    unsafe { ns_set_orbit_view(app, focus_x, focus_y, focus_z, radius, yaw, pitch) }
+}
+
+// Enable or disable scroll-wheel zoom on the orbit camera
+ns_set_orbit_zoom :: extern fn(app: App, enabled: bool)
+set_orbit_zoom :: fn(app: App, enabled: bool) {
+    unsafe { ns_set_orbit_zoom(app, enabled) }
+}
+
+// Set the modifier key the orbit camera requires before drag orbits, or clear it
+ns_set_orbit_modifier :: extern fn(app: App, modifier: ^i8)
+set_orbit_modifier :: fn(app: App, modifier: str) {
+    modifier_held := c_string(modifier)
+    unsafe { ns_set_orbit_modifier(app, ptr_cast($i8, modifier_held)) }
+    heap_release($u8, modifier_held)
+}
+
+// Set the active perspective camera's vertical field of view in degrees
+ns_set_field_of_view :: extern fn(app: App, degrees: f32)
+set_field_of_view :: fn(app: App, degrees: f32) {
+    unsafe { ns_set_field_of_view(app, degrees) }
+}
+
+// Switch the active camera to an orthographic projection
+ns_set_orthographic :: extern fn(app: App, half_height: f32)
+set_orthographic :: fn(app: App, half_height: f32) {
+    unsafe { ns_set_orthographic(app, half_height) }
+}
+
+// Switch the active camera to a perspective projection
+ns_set_perspective :: extern fn(app: App, degrees: f32)
+set_perspective :: fn(app: App, degrees: f32) {
+    unsafe { ns_set_perspective(app, degrees) }
+}
+
+// Get the active camera's world position
+ns_camera_position :: extern fn(app: App) -> Vec3
+camera_position :: fn(app: App) -> Vec3 {
+    held := unsafe { ns_camera_position(app) }
+    held
+}
+
+// Get the active camera's forward direction as a unit vector
+ns_camera_forward :: extern fn(app: App) -> Vec3
+camera_forward :: fn(app: App) -> Vec3 {
+    held := unsafe { ns_camera_forward(app) }
+    held
+}
+
+// Add a walking first-person player with mouse look, WASD, sprint, and jump
+ns_first_person :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+first_person :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_first_person(app, position_x, position_y, position_z) }
+    held
+}
+
+// Get the seconds the previous frame took
+ns_delta_time :: extern fn(app: App) -> f32
+delta_time :: fn(app: App) -> f32 {
+    held := unsafe { ns_delta_time(app) }
+    held
+}
+
+// Get the seconds since the app started
+ns_elapsed_seconds :: extern fn(app: App) -> f32
+elapsed_seconds :: fn(app: App) -> f32 {
+    held := unsafe { ns_elapsed_seconds(app) }
+    held
+}
+
+// Check whether a key is held down
+ns_key_down :: extern fn(app: App, key: ^i8) -> bool
+key_down :: fn(app: App, key: str) -> bool {
+    key_held := c_string(key)
+    held := unsafe { ns_key_down(app, ptr_cast($i8, key_held)) }
+    heap_release($u8, key_held)
+    held
+}
+
+// Check whether a key went down this frame
+ns_key_pressed :: extern fn(app: App, key: ^i8) -> bool
+key_pressed :: fn(app: App, key: str) -> bool {
+    key_held := c_string(key)
+    held := unsafe { ns_key_pressed(app, ptr_cast($i8, key_held)) }
+    heap_release($u8, key_held)
+    held
+}
+
+// Check whether a mouse button is held down
+ns_mouse_down :: extern fn(app: App, button: u8) -> bool
+mouse_down :: fn(app: App, button: u8) -> bool {
+    held := unsafe { ns_mouse_down(app, button) }
+    held
+}
+
+// Check whether a mouse button went down this frame
+ns_mouse_clicked :: extern fn(app: App, button: u8) -> bool
+mouse_clicked :: fn(app: App, button: u8) -> bool {
+    held := unsafe { ns_mouse_clicked(app, button) }
+    held
+}
+
+// Get the WASD movement direction on the ground plane
+ns_wasd :: extern fn(app: App) -> Vec3
+wasd :: fn(app: App) -> Vec3 {
+    held := unsafe { ns_wasd(app) }
+    held
+}
+
+// Check whether the pointer is over a UI element this frame
+ns_pointer_over_ui :: extern fn(app: App) -> bool
+pointer_over_ui :: fn(app: App) -> bool {
+    held := unsafe { ns_pointer_over_ui(app) }
+    held
+}
+
+// Get the scroll wheel delta this frame
+ns_mouse_scroll :: extern fn(app: App) -> f32
+mouse_scroll :: fn(app: App) -> f32 {
+    held := unsafe { ns_mouse_scroll(app) }
+    held
+}
+
+// Get the pointer movement this frame as a vector
+ns_mouse_delta :: extern fn(app: App) -> Vec3
+mouse_delta :: fn(app: App) -> Vec3 {
+    held := unsafe { ns_mouse_delta(app) }
+    held
+}
+
+// Get the number of active touch points
+ns_touch_count :: extern fn(app: App) -> i64
+touch_count :: fn(app: App) -> i64 {
+    held := unsafe { ns_touch_count(app) }
+    held
+}
+
+// Get the active touch points as [{ id, x, y }]
+ns_touches :: extern fn(app: App) -> ^i8
+touches :: fn(app: App) -> Text {
+    held := unsafe { ns_touches(app) }
+    text_from(held)
+}
+
+// Check whether a named gamepad button is held down
+ns_gamepad_button_down :: extern fn(app: App, button: ^i8) -> bool
+gamepad_button_down :: fn(app: App, button: str) -> bool {
+    button_held := c_string(button)
+    held := unsafe { ns_gamepad_button_down(app, ptr_cast($i8, button_held)) }
+    heap_release($u8, button_held)
+    held
+}
+
+// Check whether a named gamepad button went down this frame
+ns_gamepad_button_pressed :: extern fn(app: App, button: ^i8) -> bool
+gamepad_button_pressed :: fn(app: App, button: str) -> bool {
+    button_held := c_string(button)
+    held := unsafe { ns_gamepad_button_pressed(app, ptr_cast($i8, button_held)) }
+    heap_release($u8, button_held)
+    held
+}
+
+// Get a named gamepad axis value, about -1 to 1
+ns_gamepad_axis :: extern fn(app: App, axis: ^i8) -> f32
+gamepad_axis :: fn(app: App, axis: str) -> f32 {
+    axis_held := c_string(axis)
+    held := unsafe { ns_gamepad_axis(app, ptr_cast($i8, axis_held)) }
+    heap_release($u8, axis_held)
+    held
+}
+
+// Get the gamepad left stick as a vector
+ns_gamepad_left_stick :: extern fn(app: App) -> Vec3
+gamepad_left_stick :: fn(app: App) -> Vec3 {
+    held := unsafe { ns_gamepad_left_stick(app) }
+    held
+}
+
+// Get the gamepad right stick as a vector
+ns_gamepad_right_stick :: extern fn(app: App) -> Vec3
+gamepad_right_stick :: fn(app: App) -> Vec3 {
+    held := unsafe { ns_gamepad_right_stick(app) }
+    held
+}
+
+// Check whether a gamepad is connected
+ns_gamepad_connected :: extern fn(app: App) -> bool
+gamepad_connected :: fn(app: App) -> bool {
+    held := unsafe { ns_gamepad_connected(app) }
+    held
+}
+
+// Apply an instant impulse to a dynamic entity
+ns_push :: extern fn(app: App, value entity: Entity, impulse_x: f32, impulse_y: f32, impulse_z: f32)
+push :: fn(app: App, entity: Entity, impulse_x: f32, impulse_y: f32, impulse_z: f32) {
+    unsafe { ns_push(app, entity, impulse_x, impulse_y, impulse_z) }
+}
+
+// Set a dynamic body's linear velocity directly
+ns_set_velocity :: extern fn(app: App, value entity: Entity, velocity_x: f32, velocity_y: f32, velocity_z: f32)
+set_velocity :: fn(app: App, entity: Entity, velocity_x: f32, velocity_y: f32, velocity_z: f32) {
+    unsafe { ns_set_velocity(app, entity, velocity_x, velocity_y, velocity_z) }
+}
+
+// Apply a continuous force to a dynamic entity for this step
+ns_apply_force :: extern fn(app: App, value entity: Entity, force_x: f32, force_y: f32, force_z: f32)
+apply_force :: fn(app: App, entity: Entity, force_x: f32, force_y: f32, force_z: f32) {
+    unsafe { ns_apply_force(app, entity, force_x, force_y, force_z) }
+}
+
+// Apply a continuous torque to a dynamic entity for this step
+ns_apply_torque :: extern fn(app: App, value entity: Entity, torque_x: f32, torque_y: f32, torque_z: f32)
+apply_torque :: fn(app: App, entity: Entity, torque_x: f32, torque_y: f32, torque_z: f32) {
+    unsafe { ns_apply_torque(app, entity, torque_x, torque_y, torque_z) }
+}
+
+// Set a dynamic body's angular velocity directly
+ns_set_angular_velocity :: extern fn(app: App, value entity: Entity, velocity_x: f32, velocity_y: f32, velocity_z: f32)
+set_angular_velocity :: fn(app: App, entity: Entity, velocity_x: f32, velocity_y: f32, velocity_z: f32) {
+    unsafe { ns_set_angular_velocity(app, entity, velocity_x, velocity_y, velocity_z) }
+}
+
+// Get the entity's current linear velocity if it has a body
+ns_velocity :: extern fn(app: App, value entity: Entity, out: ^Vec3) -> bool
+velocity :: fn(app: App, entity: Entity) -> (found: bool, vector: Vec3) {
+    mut out := Vec3 { x = 0.0, y = 0.0, z = 0.0 }
+    held := unsafe { ns_velocity(app, entity, ptr_to(out)) }
+    return held, out
+}
+
+// Get the entity's current angular velocity if it has a body
+ns_angular_velocity :: extern fn(app: App, value entity: Entity, out: ^Vec3) -> bool
+angular_velocity :: fn(app: App, entity: Entity) -> (found: bool, vector: Vec3) {
+    mut out := Vec3 { x = 0.0, y = 0.0, z = 0.0 }
+    held := unsafe { ns_angular_velocity(app, entity, ptr_to(out)) }
+    return held, out
+}
+
+// Turn the entity's collider into an overlap-reporting sensor
+ns_make_sensor :: extern fn(app: App, value entity: Entity)
+make_sensor :: fn(app: App, entity: Entity) {
+    unsafe { ns_make_sensor(app, entity) }
+}
+
+// Get every entity whose collider overlaps a sphere
+ns_overlap_sphere :: extern fn(app: App, center_x: f32, center_y: f32, center_z: f32, radius: f32, out_len: ^i64) -> ^Entity
+overlap_sphere :: fn(app: App, center_x: f32, center_y: f32, center_z: f32, radius: f32) -> Entities {
+    mut out_len : i64 = 0
+    held := unsafe { ns_overlap_sphere(app, center_x, center_y, center_z, radius, ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Set the entity collider's membership and filter collision masks
+ns_set_collision_groups :: extern fn(app: App, value entity: Entity, membership: u32, filter: u32)
+set_collision_groups :: fn(app: App, entity: Entity, membership: u32, filter: u32) {
+    unsafe { ns_set_collision_groups(app, entity, membership, filter) }
+}
+
+// Set an entity collider's friction
+ns_set_friction :: extern fn(app: App, value entity: Entity, friction: f32)
+set_friction :: fn(app: App, entity: Entity, friction: f32) {
+    unsafe { ns_set_friction(app, entity, friction) }
+}
+
+// Set an entity collider's restitution or bounciness
+ns_set_restitution :: extern fn(app: App, value entity: Entity, restitution: f32)
+set_restitution :: fn(app: App, entity: Entity, restitution: f32) {
+    unsafe { ns_set_restitution(app, entity, restitution) }
+}
+
+// Set a dynamic body's linear damping
+ns_set_linear_damping :: extern fn(app: App, value entity: Entity, damping: f32)
+set_linear_damping :: fn(app: App, entity: Entity, damping: f32) {
+    unsafe { ns_set_linear_damping(app, entity, damping) }
+}
+
+// Set a dynamic body's angular damping
+ns_set_angular_damping :: extern fn(app: App, value entity: Entity, damping: f32)
+set_angular_damping :: fn(app: App, entity: Entity, damping: f32) {
+    unsafe { ns_set_angular_damping(app, entity, damping) }
+}
+
+// Set a dynamic body's mass in kilograms
+ns_set_mass :: extern fn(app: App, value entity: Entity, mass: f32)
+set_mass :: fn(app: App, entity: Entity, mass: f32) {
+    unsafe { ns_set_mass(app, entity, mass) }
+}
+
+// Set a body's per-body gravity multiplier
+ns_set_gravity_scale :: extern fn(app: App, value entity: Entity, scale: f32)
+set_gravity_scale :: fn(app: App, entity: Entity, scale: f32) {
+    unsafe { ns_set_gravity_scale(app, entity, scale) }
+}
+
+// Bake a navmesh over the current static geometry
+ns_bake_navmesh :: extern fn(app: App)
+bake_navmesh :: fn(app: App) {
+    unsafe { ns_bake_navmesh(app) }
+}
+
+// Spawn a navmesh agent that walks to ordered destinations
+ns_spawn_walker :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+spawn_walker :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_spawn_walker(app, position_x, position_y, position_z) }
+    held
+}
+
+// Order an agent to walk to a destination along the navmesh
+ns_walk_to :: extern fn(app: App, value agent: Entity, destination_x: f32, destination_y: f32, destination_z: f32)
+walk_to :: fn(app: App, agent: Entity, destination_x: f32, destination_y: f32, destination_z: f32) {
+    unsafe { ns_walk_to(app, agent, destination_x, destination_y, destination_z) }
+}
+
+// Set an agent's walk speed in units per second
+ns_set_walk_speed :: extern fn(app: App, value agent: Entity, speed: f32)
+set_walk_speed :: fn(app: App, agent: Entity, speed: f32) {
+    unsafe { ns_set_walk_speed(app, agent, speed) }
+}
+
+// Stop an agent where it stands and clear its path
+ns_stop_walking :: extern fn(app: App, value agent: Entity)
+stop_walking :: fn(app: App, agent: Entity) {
+    unsafe { ns_stop_walking(app, agent) }
+}
+
+// Get the entity clicked this frame, if any
+ns_clicked_entity :: extern fn(app: App, out: ^Entity) -> bool
+clicked_entity :: fn(app: App) -> (found: bool, entity: Entity) {
+    mut out := Entity { id = 0, generation = 0 }
+    held := unsafe { ns_clicked_entity(app, ptr_to(out)) }
+    return held, out
+}
+
+// Get the entity currently under the cursor, if any
+ns_entity_under_cursor :: extern fn(app: App, out: ^Entity) -> bool
+entity_under_cursor :: fn(app: App) -> (found: bool, entity: Entity) {
+    mut out := Entity { id = 0, generation = 0 }
+    held := unsafe { ns_entity_under_cursor(app, ptr_to(out)) }
+    return held, out
+}
+
+// Get where the cursor ray meets the ground plane, if it does
+ns_cursor_on_ground :: extern fn(app: App, out: ^Vec3) -> bool
+cursor_on_ground :: fn(app: App) -> (found: bool, vector: Vec3) {
+    mut out := Vec3 { x = 0.0, y = 0.0, z = 0.0 }
+    held := unsafe { ns_cursor_on_ground(app, ptr_to(out)) }
+    return held, out
+}
+
+// Spawn a flat panel in the 3d world facing the camera
+ns_spawn_world_panel :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, width: f32, height: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+spawn_world_panel :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, width: f32, height: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    held := unsafe { ns_spawn_world_panel(app, position_x, position_y, position_z, width, height, color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Add a button to a world panel at local coordinates
+ns_world_panel_button :: extern fn(app: App, value panel: Entity, x: f32, y: f32, width: f32, height: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+world_panel_button :: fn(app: App, panel: Entity, x: f32, y: f32, width: f32, height: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    held := unsafe { ns_world_panel_button(app, panel, x, y, width, height, color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Add a text label to a world panel at local coordinates
+ns_world_panel_label :: extern fn(app: App, value panel: Entity, text: ^i8, x: f32, y: f32) -> Entity
+world_panel_label :: fn(app: App, panel: Entity, text: str, x: f32, y: f32) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_world_panel_label(app, panel, ptr_cast($i8, text_held), x, y) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Check whether a world-panel button was clicked this frame
+ns_world_button_clicked :: extern fn(app: App, value button: Entity) -> bool
+world_button_clicked :: fn(app: App, button: Entity) -> bool {
+    held := unsafe { ns_world_button_clicked(app, button) }
+    held
+}
+
+// Pause a playing sound, keeping its position
+ns_pause_sound :: extern fn(app: App, value entity: Entity)
+pause_sound :: fn(app: App, entity: Entity) {
+    unsafe { ns_pause_sound(app, entity) }
+}
+
+// Resume a paused sound from where it stopped
+ns_resume_sound :: extern fn(app: App, value entity: Entity)
+resume_sound :: fn(app: App, entity: Entity) {
+    unsafe { ns_resume_sound(app, entity) }
+}
+
+// Fade a playing sound to a target volume over the given seconds
+ns_fade_volume :: extern fn(app: App, value entity: Entity, volume: f32, seconds: f32)
+fade_volume :: fn(app: App, entity: Entity, volume: f32, seconds: f32) {
+    unsafe { ns_fade_volume(app, entity, volume, seconds) }
+}
+
+// Crossfade between two sounds over the given seconds
+ns_crossfade :: extern fn(app: App, value fade_out: Entity, value fade_in: Entity, volume: f32, seconds: f32)
+crossfade :: fn(app: App, fade_out: Entity, fade_in: Entity, volume: f32, seconds: f32) {
+    unsafe { ns_crossfade(app, fade_out, fade_in, volume, seconds) }
+}
+
+// Set an audio bus's volume in decibels, fading over seconds
+ns_set_bus_volume :: extern fn(app: App, bus: u32, decibels: f32, fade_seconds: f32)
+set_bus_volume :: fn(app: App, bus: u32, decibels: f32, fade_seconds: f32) {
+    unsafe { ns_set_bus_volume(app, bus, decibels, fade_seconds) }
+}
+
+// Duck the music and ambient buses under the voice bus
+ns_duck_voice :: extern fn(app: App, amount: f32, fade_seconds: f32)
+duck_voice :: fn(app: App, amount: f32, fade_seconds: f32) {
+    unsafe { ns_duck_voice(app, amount, fade_seconds) }
+}
+
+// Add a directional light shining along a direction, like a second sun
+ns_directional_light :: extern fn(app: App, direction_x: f32, direction_y: f32, direction_z: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity
+directional_light :: fn(app: App, direction_x: f32, direction_y: f32, direction_z: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity {
+    held := unsafe { ns_directional_light(app, direction_x, direction_y, direction_z, color_x, color_y, color_z, intensity) }
+    held
+}
+
+// Add a rectangular area light, a glowing panel facing a target
+ns_area_light :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, target_x: f32, target_y: f32, target_z: f32, width: f32, height: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity
+area_light :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, target_x: f32, target_y: f32, target_z: f32, width: f32, height: f32, color_x: f32, color_y: f32, color_z: f32, intensity: f32) -> Entity {
+    held := unsafe { ns_area_light(app, position_x, position_y, position_z, target_x, target_y, target_z, width, height, color_x, color_y, color_z, intensity) }
+    held
+}
+
+// Turn shadow casting on or off for a light entity
+ns_set_light_shadows :: extern fn(app: App, value light: Entity, enabled: bool)
+set_light_shadows :: fn(app: App, light: Entity, enabled: bool) {
+    unsafe { ns_set_light_shadows(app, light, enabled) }
+}
+
+// Emit a continuous fountain of bright sparks at the given position
+ns_emit_sparks :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity
+emit_sparks :: fn(app: App, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    held := unsafe { ns_emit_sparks(app, position_x, position_y, position_z) }
+    held
+}
+
+// Launch a firework shell that arcs and bursts on its own
+ns_emit_firework :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, velocity_x: f32, velocity_y: f32, velocity_z: f32) -> Entity
+emit_firework :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, velocity_x: f32, velocity_y: f32, velocity_z: f32) -> Entity {
+    held := unsafe { ns_emit_firework(app, position_x, position_y, position_z, velocity_x, velocity_y, velocity_z) }
+    held
+}
+
+// Spawn a configurable continuous emitter at the given position
+ns_emit_particles :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, rate: f32, lifetime: f32, size: f32, gravity_x: f32, gravity_y: f32, gravity_z: f32) -> Entity
+emit_particles :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, rate: f32, lifetime: f32, size: f32, gravity_x: f32, gravity_y: f32, gravity_z: f32) -> Entity {
+    held := unsafe { ns_emit_particles(app, position_x, position_y, position_z, rate, lifetime, size, gravity_x, gravity_y, gravity_z) }
+    held
+}
+
+// Turn alpha blending on or off for the entity
+ns_set_alpha_blend :: extern fn(app: App, value entity: Entity, enabled: bool)
+set_alpha_blend :: fn(app: App, entity: Entity, enabled: bool) {
+    unsafe { ns_set_alpha_blend(app, entity, enabled) }
+}
+
+// Switch the entity to alpha cutout, discarding texels below the cutoff
+ns_set_alpha_cutoff :: extern fn(app: App, value entity: Entity, cutoff: f32)
+set_alpha_cutoff :: fn(app: App, entity: Entity, cutoff: f32) {
+    unsafe { ns_set_alpha_cutoff(app, entity, cutoff) }
+}
+
+// Render both faces of the entity's triangles
+ns_set_double_sided :: extern fn(app: App, value entity: Entity, double_sided: bool)
+set_double_sided :: fn(app: App, entity: Entity, double_sided: bool) {
+    unsafe { ns_set_double_sided(app, entity, double_sided) }
+}
+
+// Set the index of refraction for the entity's surface
+ns_set_ior :: extern fn(app: App, value entity: Entity, ior: f32)
+set_ior :: fn(app: App, entity: Entity, ior: f32) {
+    unsafe { ns_set_ior(app, entity, ior) }
+}
+
+// Set how much light passes through the entity
+ns_set_transmission :: extern fn(app: App, value entity: Entity, factor: f32)
+set_transmission :: fn(app: App, entity: Entity, factor: f32) {
+    unsafe { ns_set_transmission(app, entity, factor) }
+}
+
+// Add a clearcoat layer over the entity with its own factor and roughness
+ns_set_clearcoat :: extern fn(app: App, value entity: Entity, factor: f32, roughness: f32)
+set_clearcoat :: fn(app: App, entity: Entity, factor: f32, roughness: f32) {
+    unsafe { ns_set_clearcoat(app, entity, factor, roughness) }
+}
+
+// Set anisotropic reflection stretching highlights along a rotation
+ns_set_anisotropy :: extern fn(app: App, value entity: Entity, strength: f32, rotation: f32)
+set_anisotropy :: fn(app: App, entity: Entity, strength: f32, rotation: f32) {
+    unsafe { ns_set_anisotropy(app, entity, strength, rotation) }
+}
+
+// Transform the entity's base color texture coordinates
+ns_set_uv_transform :: extern fn(app: App, value entity: Entity, offset_x: f32, offset_y: f32, scale_x: f32, scale_y: f32, rotation: f32)
+set_uv_transform :: fn(app: App, entity: Entity, offset_x: f32, offset_y: f32, scale_x: f32, scale_y: f32, rotation: f32) {
+    unsafe { ns_set_uv_transform(app, entity, offset_x, offset_y, scale_x, scale_y, rotation) }
+}
+
+// Add a soft retroreflective sheen tint to the entity
+ns_set_sheen :: extern fn(app: App, value entity: Entity, color_x: f32, color_y: f32, color_z: f32, roughness: f32)
+set_sheen :: fn(app: App, entity: Entity, color_x: f32, color_y: f32, color_z: f32, roughness: f32) {
+    unsafe { ns_set_sheen(app, entity, color_x, color_y, color_z, roughness) }
+}
+
+// Add a thin-film iridescence to the entity
+ns_set_iridescence :: extern fn(app: App, value entity: Entity, factor: f32, ior: f32)
+set_iridescence :: fn(app: App, entity: Entity, factor: f32, ior: f32) {
+    unsafe { ns_set_iridescence(app, entity, factor, ior) }
+}
+
+// Set the entity's specular reflectance factor and tint
+ns_set_specular :: extern fn(app: App, value entity: Entity, factor: f32, color_x: f32, color_y: f32, color_z: f32)
+set_specular :: fn(app: App, entity: Entity, factor: f32, color_x: f32, color_y: f32, color_z: f32) {
+    unsafe { ns_set_specular(app, entity, factor, color_x, color_y, color_z) }
+}
+
+// Scale the strength of the entity's normal map
+ns_set_normal_scale :: extern fn(app: App, value entity: Entity, scale: f32)
+set_normal_scale :: fn(app: App, entity: Entity, scale: f32) {
+    unsafe { ns_set_normal_scale(app, entity, scale) }
+}
+
+// Scale how strongly the entity's ambient occlusion map darkens it
+ns_set_occlusion_strength :: extern fn(app: App, value entity: Entity, strength: f32)
+set_occlusion_strength :: fn(app: App, entity: Entity, strength: f32) {
+    unsafe { ns_set_occlusion_strength(app, entity, strength) }
+}
+
+// Set the entity's emissive strength on its own
+ns_set_emissive_strength :: extern fn(app: App, value entity: Entity, strength: f32)
+set_emissive_strength :: fn(app: App, entity: Entity, strength: f32) {
+    unsafe { ns_set_emissive_strength(app, entity, strength) }
+}
+
+// Set the volume thickness of a transmissive entity
+ns_set_thickness :: extern fn(app: App, value entity: Entity, thickness: f32)
+set_thickness :: fn(app: App, entity: Entity, thickness: f32) {
+    unsafe { ns_set_thickness(app, entity, thickness) }
+}
+
+// Set a 3d text or label entity's outline width and color
+ns_set_text_outline :: extern fn(app: App, value entity: Entity, width: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32)
+set_text_outline :: fn(app: App, entity: Entity, width: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) {
+    unsafe { ns_set_text_outline(app, entity, width, color_x, color_y, color_z, color_w) }
+}
+
+// Set one morph target's weight on an entity by index
+ns_set_morph_weight :: extern fn(app: App, value entity: Entity, index: u32, weight: f32)
+set_morph_weight :: fn(app: App, entity: Entity, index: u32, weight: f32) {
+    unsafe { ns_set_morph_weight(app, entity, index, weight) }
+}
+
+// Set the OS window title
+ns_set_window_title :: extern fn(app: App, title: ^i8)
+set_window_title :: fn(app: App, title: str) {
+    title_held := c_string(title)
+    unsafe { ns_set_window_title(app, ptr_cast($i8, title_held)) }
+    heap_release($u8, title_held)
+}
+
+// Lock the cursor to the window for mouse-look, or release it
+ns_lock_cursor :: extern fn(app: App, locked: bool)
+lock_cursor :: fn(app: App, locked: bool) {
+    unsafe { ns_lock_cursor(app, locked) }
+}
+
+// Ask the app to exit at the end of the frame
+ns_request_exit :: extern fn(app: App)
+request_exit :: fn(app: App) {
+    unsafe { ns_request_exit(app) }
+}
+
+// Put an entity on a render layer cameras can selectively show
+ns_set_render_layer :: extern fn(app: App, value entity: Entity, layer: u32)
+set_render_layer :: fn(app: App, entity: Entity, layer: u32) {
+    unsafe { ns_set_render_layer(app, entity, layer) }
+}
+
+// Set which render layers a camera sees as a bitmask
+ns_set_camera_layers :: extern fn(app: App, value camera: Entity, mask: u32)
+set_camera_layers :: fn(app: App, camera: Entity, mask: u32) {
+    unsafe { ns_set_camera_layers(app, camera, mask) }
+}
+
+// Add a third-person camera trailing a target at a distance
+ns_third_person_camera :: extern fn(app: App, value target: Entity, distance: f32) -> Entity
+third_person_camera :: fn(app: App, target: Entity, distance: f32) -> Entity {
+    held := unsafe { ns_third_person_camera(app, target, distance) }
+    held
+}
+
+// Spawn a cloth grid hanging from a position, pinned along its top edge
+ns_spawn_cloth :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, width: f32, height: f32, columns: u32, rows: u32) -> Entity
+spawn_cloth :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, width: f32, height: f32, columns: u32, rows: u32) -> Entity {
+    held := unsafe { ns_spawn_cloth(app, position_x, position_y, position_z, width, height, columns, rows) }
+    held
+}
+
+// Reset a cloth back to its spawned shape, clearing all motion
+ns_reset_cloth :: extern fn(app: App, value entity: Entity)
+reset_cloth :: fn(app: App, entity: Entity) {
+    unsafe { ns_reset_cloth(app, entity) }
+}
+
+// Set a global wind force on all cloth
+ns_set_wind :: extern fn(app: App, direction_x: f32, direction_y: f32, direction_z: f32, strength: f32)
+set_wind :: fn(app: App, direction_x: f32, direction_y: f32, direction_z: f32, strength: f32) {
+    unsafe { ns_set_wind(app, direction_x, direction_y, direction_z, strength) }
+}
+
+// Pause the running cutscene timeline
+ns_pause_cutscene :: extern fn(app: App)
+pause_cutscene :: fn(app: App) {
+    unsafe { ns_pause_cutscene(app) }
+}
+
+// Resume a paused cutscene
+ns_resume_cutscene :: extern fn(app: App)
+resume_cutscene :: fn(app: App) {
+    unsafe { ns_resume_cutscene(app) }
+}
+
+// Stop the cutscene and clear it
+ns_stop_cutscene :: extern fn(app: App)
+stop_cutscene :: fn(app: App) {
+    unsafe { ns_stop_cutscene(app) }
+}
+
+// Jump the cutscene to the given time along its timeline
+ns_seek_cutscene :: extern fn(app: App, seconds: f32)
+seek_cutscene :: fn(app: App, seconds: f32) {
+    unsafe { ns_seek_cutscene(app, seconds) }
+}
+
+// Set the camera the cutscene drives
+ns_set_cutscene_camera :: extern fn(app: App, value camera: Entity)
+set_cutscene_camera :: fn(app: App, camera: Entity) {
+    unsafe { ns_set_cutscene_camera(app, camera) }
+}
+
+// Bind a named cutscene track to an entity it animates
+ns_bind_cutscene_actor :: extern fn(app: App, name: ^i8, value entity: Entity)
+bind_cutscene_actor :: fn(app: App, name: str, entity: Entity) {
+    name_held := c_string(name)
+    unsafe { ns_bind_cutscene_actor(app, ptr_cast($i8, name_held), entity) }
+    heap_release($u8, name_held)
+}
+
+// Spawn a dynamic cylinder physics body at the given position
+ns_spawn_cylinder_body :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, half_height: f32, radius: f32, mass: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+spawn_cylinder_body :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, half_height: f32, radius: f32, mass: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    held := unsafe { ns_spawn_cylinder_body(app, position_x, position_y, position_z, half_height, radius, mass, color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Spawn a dynamic capsule physics body at the given position
+ns_spawn_capsule_body :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, half_height: f32, radius: f32, mass: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+spawn_capsule_body :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, half_height: f32, radius: f32, mass: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    held := unsafe { ns_spawn_capsule_body(app, position_x, position_y, position_z, half_height, radius, mass, color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Set a character controller's move speed in units per second
+ns_set_controller_speed :: extern fn(app: App, value entity: Entity, speed: f32)
+set_controller_speed :: fn(app: App, entity: Entity, speed: f32) {
+    unsafe { ns_set_controller_speed(app, entity, speed) }
+}
+
+// Set a character controller's jump impulse
+ns_set_controller_jump :: extern fn(app: App, value entity: Entity, impulse: f32)
+set_controller_jump :: fn(app: App, entity: Entity, impulse: f32) {
+    unsafe { ns_set_controller_jump(app, entity, impulse) }
+}
+
+// Check whether a character controller is grounded this frame
+ns_is_grounded :: extern fn(app: App, value entity: Entity) -> bool
+is_grounded :: fn(app: App, entity: Entity) -> bool {
+    held := unsafe { ns_is_grounded(app, entity) }
+    held
+}
+
+// Register a texture from encoded png or jpeg bytes
+ns_load_texture :: extern fn(app: App, name: ^i8, image_bytes: ^u8, image_bytes_len: i64)
+load_texture :: fn(app: App, name: str, image_bytes: []u8) {
+    name_held := c_string(name)
+    mut image_bytes_ptr := null_of($u8)
+    if (slice_len(image_bytes) > 0) {
+        image_bytes_ptr = ptr_to(image_bytes[0])
+    }
+    unsafe { ns_load_texture(app, ptr_cast($i8, name_held), image_bytes_ptr, slice_len(image_bytes)) }
+    heap_release($u8, name_held)
+}
+
+// Register a linear-space texture for normal, metallic-roughness, or occlusion data
+ns_load_texture_linear :: extern fn(app: App, name: ^i8, image_bytes: ^u8, image_bytes_len: i64)
+load_texture_linear :: fn(app: App, name: str, image_bytes: []u8) {
+    name_held := c_string(name)
+    mut image_bytes_ptr := null_of($u8)
+    if (slice_len(image_bytes) > 0) {
+        image_bytes_ptr = ptr_to(image_bytes[0])
+    }
+    unsafe { ns_load_texture_linear(app, ptr_cast($i8, name_held), image_bytes_ptr, slice_len(image_bytes)) }
+    heap_release($u8, name_held)
+}
+
+// Register a texture from raw RGBA8 pixels
+ns_register_texture :: extern fn(app: App, name: ^i8, width: u32, height: u32, rgba: ^u8, rgba_len: i64)
+register_texture :: fn(app: App, name: str, width: u32, height: u32, rgba: []u8) {
+    name_held := c_string(name)
+    mut rgba_ptr := null_of($u8)
+    if (slice_len(rgba) > 0) {
+        rgba_ptr = ptr_to(rgba[0])
+    }
+    unsafe { ns_register_texture(app, ptr_cast($i8, name_held), width, height, rgba_ptr, slice_len(rgba)) }
+    heap_release($u8, name_held)
+}
+
+// Get every registered material name
+ns_list_materials :: extern fn(app: App) -> ^i8
+list_materials :: fn(app: App) -> Text {
+    held := unsafe { ns_list_materials(app) }
+    text_from(held)
+}
+
+// Get a registered material's properties by name
+ns_material :: extern fn(app: App, name: ^i8) -> ^i8
+material :: fn(app: App, name: str) -> Text {
+    name_held := c_string(name)
+    held := unsafe { ns_material(app, ptr_cast($i8, name_held)) }
+    heap_release($u8, name_held)
+    text_from(held)
+}
+
+// Register a named material in the shared registry
+ns_register_material :: extern fn(app: App, name: ^i8, base_color_x: f32, base_color_y: f32, base_color_z: f32, base_color_w: f32, metallic: f32, roughness: f32, emissive_x: f32, emissive_y: f32, emissive_z: f32) -> ^i8
+register_material :: fn(app: App, name: str, base_color_x: f32, base_color_y: f32, base_color_z: f32, base_color_w: f32, metallic: f32, roughness: f32, emissive_x: f32, emissive_y: f32, emissive_z: f32) -> Text {
+    name_held := c_string(name)
+    held := unsafe { ns_register_material(app, ptr_cast($i8, name_held), base_color_x, base_color_y, base_color_z, base_color_w, metallic, roughness, emissive_x, emissive_y, emissive_z) }
+    heap_release($u8, name_held)
+    text_from(held)
+}
+
+// Replace the material registered under a name and reupload it
+ns_update_material :: extern fn(app: App, name: ^i8, base_color_x: f32, base_color_y: f32, base_color_z: f32, base_color_w: f32, metallic: f32, roughness: f32, emissive_x: f32, emissive_y: f32, emissive_z: f32)
+update_material :: fn(app: App, name: str, base_color_x: f32, base_color_y: f32, base_color_z: f32, base_color_w: f32, metallic: f32, roughness: f32, emissive_x: f32, emissive_y: f32, emissive_z: f32) {
+    name_held := c_string(name)
+    unsafe { ns_update_material(app, ptr_cast($i8, name_held), base_color_x, base_color_y, base_color_z, base_color_w, metallic, roughness, emissive_x, emissive_y, emissive_z) }
+    heap_release($u8, name_held)
+}
+
+// Activate a material variant by name across the scene
+ns_set_material_variant :: extern fn(app: App, variant: ^i8) -> i64
+set_material_variant :: fn(app: App, variant: str) -> i64 {
+    variant_held := c_string(variant)
+    held := unsafe { ns_set_material_variant(app, ptr_cast($i8, variant_held)) }
+    heap_release($u8, variant_held)
+    held
+}
+
+// Spawn one object at each position, all sharing one material
+ns_spawn_objects :: extern fn(app: App, shape: u32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, value body: Body, positions: ^Vec3, positions_len: i64, out_len: ^i64) -> ^Entity
+spawn_objects :: fn(app: App, shape: u32, scale_x: f32, scale_y: f32, scale_z: f32, color_x: f32, color_y: f32, color_z: f32, color_w: f32, body: Body, positions: []Vec3) -> Entities {
+    mut positions_ptr := null_of($Vec3)
+    if (slice_len(positions) > 0) {
+        positions_ptr = ptr_to(positions[0])
+    }
+    mut out_len : i64 = 0
+    held := unsafe { ns_spawn_objects(app, shape, scale_x, scale_y, scale_z, color_x, color_y, color_z, color_w, body, positions_ptr, slice_len(positions), ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Spawn one entity rendering many copies of a shape in a single draw call
+ns_spawn_instanced :: extern fn(app: App, shape: u32, transforms: ^InstanceWire, transforms_len: i64, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity
+spawn_instanced :: fn(app: App, shape: u32, transforms: []InstanceWire, color_x: f32, color_y: f32, color_z: f32, color_w: f32) -> Entity {
+    mut transforms_ptr := null_of($InstanceWire)
+    if (slice_len(transforms) > 0) {
+        transforms_ptr = ptr_to(transforms[0])
+    }
+    held := unsafe { ns_spawn_instanced(app, shape, transforms_ptr, slice_len(transforms), color_x, color_y, color_z, color_w) }
+    held
+}
+
+// Spawn an instanced mesh drawing every transform with a named material
+ns_spawn_instanced_with_material :: extern fn(app: App, shape: u32, transforms: ^InstanceWire, transforms_len: i64, material: ^i8) -> Entity
+spawn_instanced_with_material :: fn(app: App, shape: u32, transforms: []InstanceWire, material: str) -> Entity {
+    mut transforms_ptr := null_of($InstanceWire)
+    if (slice_len(transforms) > 0) {
+        transforms_ptr = ptr_to(transforms[0])
+    }
+    material_held := c_string(material)
+    held := unsafe { ns_spawn_instanced_with_material(app, shape, transforms_ptr, slice_len(transforms), ptr_cast($i8, material_held)) }
+    heap_release($u8, material_held)
+    held
+}
+
+// Replace an instanced batch's transforms and reupload its instance buffer
+ns_set_instances :: extern fn(app: App, value batch: Entity, transforms: ^InstanceWire, transforms_len: i64)
+set_instances :: fn(app: App, batch: Entity, transforms: []InstanceWire) {
+    mut transforms_ptr := null_of($InstanceWire)
+    if (slice_len(transforms) > 0) {
+        transforms_ptr = ptr_to(transforms[0])
+    }
+    unsafe { ns_set_instances(app, batch, transforms_ptr, slice_len(transforms)) }
+}
+
+// Spawn a simulated cloth sheet hanging from a position, pinned on top
+ns_spawn_cloth_sheet :: extern fn(app: App, position_x: f32, position_y: f32, position_z: f32, width: f32, height: f32) -> Entity
+spawn_cloth_sheet :: fn(app: App, position_x: f32, position_y: f32, position_z: f32, width: f32, height: f32) -> Entity {
+    held := unsafe { ns_spawn_cloth_sheet(app, position_x, position_y, position_z, width, height) }
+    held
+}
+
+// Cross-fade to a named clip over the given seconds
+ns_blend_to_animation_named :: extern fn(app: App, value entity: Entity, name: ^i8, seconds: f32) -> bool
+blend_to_animation_named :: fn(app: App, entity: Entity, name: str, seconds: f32) -> bool {
+    name_held := c_string(name)
+    held := unsafe { ns_blend_to_animation_named(app, entity, ptr_cast($i8, name_held), seconds) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Play an extra clip on top of the base animation at a weight
+ns_add_animation_layer :: extern fn(app: App, value entity: Entity, clip_index: i64, weight: f32)
+add_animation_layer :: fn(app: App, entity: Entity, clip_index: i64, weight: f32) {
+    unsafe { ns_add_animation_layer(app, entity, clip_index, weight) }
+}
+
+// Register an entity under a name so it can be looked up
+ns_name_entity :: extern fn(app: App, name: ^i8, value entity: Entity)
+name_entity :: fn(app: App, name: str, entity: Entity) {
+    name_held := c_string(name)
+    unsafe { ns_name_entity(app, ptr_cast($i8, name_held), entity) }
+    heap_release($u8, name_held)
+}
+
+// Get the entity's name, or a stable fallback when it has none
+ns_name :: extern fn(app: App, value entity: Entity) -> ^i8
+name :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_name(app, entity) }
+    text_from(held)
+}
+
+// Rename the entity
+ns_set_entity_name :: extern fn(app: App, value entity: Entity, name: ^i8)
+set_entity_name :: fn(app: App, entity: Entity, name: str) {
+    name_held := c_string(name)
+    unsafe { ns_set_entity_name(app, entity, ptr_cast($i8, name_held)) }
+    heap_release($u8, name_held)
+}
+
+// Get the entity's direct children in id order
+ns_children :: extern fn(app: App, value entity: Entity, out_len: ^i64) -> ^Entity
+children :: fn(app: App, entity: Entity) -> Entities {
+    mut out_len : i64 = 0
+    held := unsafe { ns_children(app, entity, ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Get the entity's whole subtree below it
+ns_descendants :: extern fn(app: App, value entity: Entity, out_len: ^i64) -> ^Entity
+descendants :: fn(app: App, entity: Entity) -> Entities {
+    mut out_len : i64 = 0
+    held := unsafe { ns_descendants(app, entity, ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Get every parentless transform entity in id order
+ns_roots :: extern fn(app: App, out_len: ^i64) -> ^Entity
+roots :: fn(app: App) -> Entities {
+    mut out_len : i64 = 0
+    held := unsafe { ns_roots(app, ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Get the whole transform hierarchy flattened depth-first
+ns_scene_tree :: extern fn(app: App) -> ^i8
+scene_tree :: fn(app: App) -> Text {
+    held := unsafe { ns_scene_tree(app) }
+    text_from(held)
+}
+
+// Get the entity's resolved material as json
+ns_material_of :: extern fn(app: App, value entity: Entity) -> ^i8
+material_of :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_material_of(app, entity) }
+    text_from(held)
+}
+
+// Get the entity's base color as linear RGBA
+ns_color :: extern fn(app: App, value entity: Entity) -> ^i8
+color :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_color(app, entity) }
+    text_from(held)
+}
+
+// Get the entity's metallic and roughness factors
+ns_metallic_roughness :: extern fn(app: App, value entity: Entity) -> ^i8
+metallic_roughness :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_metallic_roughness(app, entity) }
+    text_from(held)
+}
+
+// Get the entity's emissive color and strength
+ns_emissive :: extern fn(app: App, value entity: Entity) -> ^i8
+emissive :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_emissive(app, entity) }
+    text_from(held)
+}
+
+// Check whether the entity renders unlit
+ns_unlit :: extern fn(app: App, value entity: Entity) -> ^i8
+unlit :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_unlit(app, entity) }
+    text_from(held)
+}
+
+// Get the entity's base color texture name, if any
+ns_texture :: extern fn(app: App, value entity: Entity) -> ^i8
+texture :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_texture(app, entity) }
+    text_from(held)
+}
+
+// Get a summary of the entity as json
+ns_describe_entity :: extern fn(app: App, value entity: Entity) -> ^i8
+describe_entity :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_describe_entity(app, entity) }
+    text_from(held)
+}
+
+// Set the horizontal alignment of a 3d text or label entity
+ns_set_text_alignment :: extern fn(app: App, value entity: Entity, alignment: u32)
+set_text_alignment :: fn(app: App, entity: Entity, alignment: u32) {
+    unsafe { ns_set_text_alignment(app, entity, alignment) }
+}
+
+// Set every morph weight at once in target order
+ns_set_morph_weights :: extern fn(app: App, value entity: Entity, weights: ^f32, weights_len: i64)
+set_morph_weights :: fn(app: App, entity: Entity, weights: []f32) {
+    mut weights_ptr := null_of($f32)
+    if (slice_len(weights) > 0) {
+        weights_ptr = ptr_to(weights[0])
+    }
+    unsafe { ns_set_morph_weights(app, entity, weights_ptr, slice_len(weights)) }
+}
+
+// Get one morph target's weight by index
+ns_morph_weight :: extern fn(app: App, value entity: Entity, index: u32) -> f32
+morph_weight :: fn(app: App, entity: Entity, index: u32) -> f32 {
+    held := unsafe { ns_morph_weight(app, entity, index) }
+    held
+}
+
+// Get the number of morph targets the entity has
+ns_morph_target_count :: extern fn(app: App, value entity: Entity) -> i64
+morph_target_count :: fn(app: App, entity: Entity) -> i64 {
+    held := unsafe { ns_morph_target_count(app, entity) }
+    held
+}
+
+// Enable distance fog between a start and end, or disable it
+ns_set_fog :: extern fn(app: App, enabled: bool, color_x: f32, color_y: f32, color_z: f32, start: f32, end: f32)
+set_fog :: fn(app: App, enabled: bool, color_x: f32, color_y: f32, color_z: f32, start: f32, end: f32) {
+    unsafe { ns_set_fog(app, enabled, color_x, color_y, color_z, start, end) }
+}
+
+// Set the fog density falloff: 1 linear, 2 exponential, 3 exponential squared
+ns_set_fog_mode :: extern fn(app: App, mode: u32)
+set_fog_mode :: fn(app: App, mode: u32) {
+    unsafe { ns_set_fog_mode(app, mode) }
+}
+
+// Set depth of field focus and blur parameters
+ns_set_depth_of_field :: extern fn(app: App, enabled: bool, focus_distance: f32, focus_range: f32, max_blur_radius: f32, bokeh_threshold: f32)
+set_depth_of_field :: fn(app: App, enabled: bool, focus_distance: f32, focus_range: f32, max_blur_radius: f32, bokeh_threshold: f32) {
+    unsafe { ns_set_depth_of_field(app, enabled, focus_distance, focus_range, max_blur_radius, bokeh_threshold) }
+}
+
+// Save a screenshot of the next rendered frame to a path as png
+ns_screenshot :: extern fn(app: App, path: ^i8)
+screenshot :: fn(app: App, path: str) {
+    path_held := c_string(path)
+    unsafe { ns_screenshot(app, ptr_cast($i8, path_held)) }
+    heap_release($u8, path_held)
+}
+
+// Set the active camera's shading mode
+ns_set_shading_mode :: extern fn(app: App, mode: ^i8)
+set_shading_mode :: fn(app: App, mode: str) {
+    mode_held := c_string(mode)
+    unsafe { ns_set_shading_mode(app, ptr_cast($i8, mode_held)) }
+    heap_release($u8, mode_held)
+}
+
+// Glide the entity to a target position over the given seconds
+ns_animate_position :: extern fn(app: App, value entity: Entity, to_x: f32, to_y: f32, to_z: f32, seconds: f32, easing: ^i8)
+animate_position :: fn(app: App, entity: Entity, to_x: f32, to_y: f32, to_z: f32, seconds: f32, easing: str) {
+    easing_held := c_string(easing)
+    unsafe { ns_animate_position(app, entity, to_x, to_y, to_z, seconds, ptr_cast($i8, easing_held)) }
+    heap_release($u8, easing_held)
+}
+
+// Grow or shrink the entity to a target scale over the given seconds
+ns_animate_scale :: extern fn(app: App, value entity: Entity, to_x: f32, to_y: f32, to_z: f32, seconds: f32, easing: ^i8)
+animate_scale :: fn(app: App, entity: Entity, to_x: f32, to_y: f32, to_z: f32, seconds: f32, easing: str) {
+    easing_held := c_string(easing)
+    unsafe { ns_animate_scale(app, entity, to_x, to_y, to_z, seconds, ptr_cast($i8, easing_held)) }
+    heap_release($u8, easing_held)
+}
+
+// Fade the entity's base color to a target over the given seconds
+ns_animate_color :: extern fn(app: App, value entity: Entity, to_x: f32, to_y: f32, to_z: f32, to_w: f32, seconds: f32, easing: ^i8)
+animate_color :: fn(app: App, entity: Entity, to_x: f32, to_y: f32, to_z: f32, to_w: f32, seconds: f32, easing: str) {
+    easing_held := c_string(easing)
+    unsafe { ns_animate_color(app, entity, to_x, to_y, to_z, to_w, seconds, ptr_cast($i8, easing_held)) }
+    heap_release($u8, easing_held)
+}
+
+// Shake the camera for a duration at the given strength
+ns_shake_camera :: extern fn(app: App, strength: f32, seconds: f32)
+shake_camera :: fn(app: App, strength: f32, seconds: f32) {
+    unsafe { ns_shake_camera(app, strength, seconds) }
+}
+
+// Bend a three-joint chain so the tip reaches a world target
+ns_reach_to :: extern fn(app: App, value root: Entity, value mid: Entity, value tip: Entity, target_x: f32, target_y: f32, target_z: f32, value pole: Vec3, pole_present: bool)
+reach_to :: fn(app: App, root: Entity, mid: Entity, tip: Entity, target_x: f32, target_y: f32, target_z: f32, pole: Vec3, pole_present: bool) {
+    unsafe { ns_reach_to(app, root, mid, tip, target_x, target_y, target_z, pole, pole_present) }
+}
+
+// Get an entity's world-space bounding box as json
+ns_bounds :: extern fn(app: App, value entity: Entity) -> ^i8
+bounds :: fn(app: App, entity: Entity) -> Text {
+    held := unsafe { ns_bounds(app, entity) }
+    text_from(held)
+}
+
+// Get the combined world-space bounding box of several entities
+ns_bounds_of :: extern fn(app: App, entities: ^Entity, entities_len: i64) -> ^i8
+bounds_of :: fn(app: App, entities: []Entity) -> Text {
+    mut entities_ptr := null_of($Entity)
+    if (slice_len(entities) > 0) {
+        entities_ptr = ptr_to(entities[0])
+    }
+    held := unsafe { ns_bounds_of(app, entities_ptr, slice_len(entities)) }
+    text_from(held)
+}
+
+// Frame the given entities in view, moving the camera to fit them
+ns_frame_entities :: extern fn(app: App, entities: ^Entity, entities_len: i64)
+frame_entities :: fn(app: App, entities: []Entity) {
+    mut entities_ptr := null_of($Entity)
+    if (slice_len(entities) > 0) {
+        entities_ptr = ptr_to(entities[0])
+    }
+    unsafe { ns_frame_entities(app, entities_ptr, slice_len(entities)) }
+}
+
+// Spawn a fully configured particle emitter
+ns_spawn_particle_emitter :: extern fn(app: App, value emitter: EmitterWire) -> Entity
+spawn_particle_emitter :: fn(app: App, emitter: EmitterWire) -> Entity {
+    held := unsafe { ns_spawn_particle_emitter(app, emitter) }
+    held
+}
+
+// Replace a spawned emitter's configuration
+ns_set_emitter :: extern fn(app: App, value emitter_entity: Entity, value emitter: EmitterWire)
+set_emitter :: fn(app: App, emitter_entity: Entity, emitter: EmitterWire) {
+    unsafe { ns_set_emitter(app, emitter_entity, emitter) }
+}
+
+// Project a texture onto the surface at a position facing a normal
+ns_spawn_decal :: extern fn(app: App, texture: ^i8, position_x: f32, position_y: f32, position_z: f32, normal_x: f32, normal_y: f32, normal_z: f32, size: f32) -> Entity
+spawn_decal :: fn(app: App, texture: str, position_x: f32, position_y: f32, position_z: f32, normal_x: f32, normal_y: f32, normal_z: f32, size: f32) -> Entity {
+    texture_held := c_string(texture)
+    held := unsafe { ns_spawn_decal(app, ptr_cast($i8, texture_held), position_x, position_y, position_z, normal_x, normal_y, normal_z, size) }
+    heap_release($u8, texture_held)
+    held
+}
+
+// Capture the world to a self-contained compressed binary scene
+ns_save_scene :: extern fn(app: App, name: ^i8, out_len: ^i64) -> ^u8
+save_scene :: fn(app: App, name: str) -> Bytes {
+    name_held := c_string(name)
+    mut out_len : i64 = 0
+    held := unsafe { ns_save_scene(app, ptr_cast($i8, name_held), ptr_to(out_len)) }
+    heap_release($u8, name_held)
+    bytes_from(held, out_len)
+}
+
+// Spawn a saved scene into the world and return its root entities
+ns_load_scene :: extern fn(app: App, bytes: ^u8, bytes_len: i64, out_len: ^i64) -> ^Entity
+load_scene :: fn(app: App, bytes: []u8) -> Entities {
+    mut bytes_ptr := null_of($u8)
+    if (slice_len(bytes) > 0) {
+        bytes_ptr = ptr_to(bytes[0])
+    }
+    mut out_len : i64 = 0
+    held := unsafe { ns_load_scene(app, bytes_ptr, slice_len(bytes), ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Get the window's inner size in physical pixels
+ns_window_size :: extern fn(app: App) -> ^i8
+window_size :: fn(app: App) -> Text {
+    held := unsafe { ns_window_size(app) }
+    text_from(held)
+}
+
+// Check whether the cursor is currently locked
+ns_cursor_locked :: extern fn(app: App) -> bool
+cursor_locked :: fn(app: App) -> bool {
+    held := unsafe { ns_cursor_locked(app) }
+    held
+}
+
+// Get the current frames per second
+ns_frames_per_second :: extern fn(app: App) -> f32
+frames_per_second :: fn(app: App) -> f32 {
+    held := unsafe { ns_frames_per_second(app) }
+    held
+}
+
+// Get the number of frames rendered since startup
+ns_frame_count :: extern fn(app: App) -> i64
+frame_count :: fn(app: App) -> i64 {
+    held := unsafe { ns_frame_count(app) }
+    held
+}
+
+// Get the milliseconds since the app started
+ns_uptime_milliseconds :: extern fn(app: App) -> i64
+uptime_milliseconds :: fn(app: App) -> i64 {
+    held := unsafe { ns_uptime_milliseconds(app) }
+    held
+}
+
+// Bake the navmesh with an explicit Recast configuration
+ns_bake_navmesh_with :: extern fn(app: App, value config: RecastConfigWire)
+bake_navmesh_with :: fn(app: App, config: RecastConfigWire) {
+    unsafe { ns_bake_navmesh_with(app, config) }
+}
+
+// Cast a ray against all physics colliders and return the closest hit
+ns_raycast :: extern fn(app: App, origin_x: f32, origin_y: f32, origin_z: f32, direction_x: f32, direction_y: f32, direction_z: f32, max_distance: f32) -> ^i8
+raycast :: fn(app: App, origin_x: f32, origin_y: f32, origin_z: f32, direction_x: f32, direction_y: f32, direction_z: f32, max_distance: f32) -> Text {
+    held := unsafe { ns_raycast(app, origin_x, origin_y, origin_z, direction_x, direction_y, direction_z, max_distance) }
+    text_from(held)
+}
+
+// Weld two bodies together rigidly
+ns_attach_fixed :: extern fn(app: App, value parent: Entity, value child: Entity) -> bool
+attach_fixed :: fn(app: App, parent: Entity, child: Entity) -> bool {
+    held := unsafe { ns_attach_fixed(app, parent, child) }
+    held
+}
+
+// Hinge two bodies around an axis
+ns_attach_hinge :: extern fn(app: App, value parent: Entity, value child: Entity, axis: ^i8) -> bool
+attach_hinge :: fn(app: App, parent: Entity, child: Entity, axis: str) -> bool {
+    axis_held := c_string(axis)
+    held := unsafe { ns_attach_hinge(app, parent, child, ptr_cast($i8, axis_held)) }
+    heap_release($u8, axis_held)
+    held
+}
+
+// Connect two bodies with a spring
+ns_attach_spring :: extern fn(app: App, value parent: Entity, value child: Entity, rest_length: f32, stiffness: f32, damping: f32) -> bool
+attach_spring :: fn(app: App, parent: Entity, child: Entity, rest_length: f32, stiffness: f32, damping: f32) -> bool {
+    held := unsafe { ns_attach_spring(app, parent, child, rest_length, stiffness, damping) }
+    held
+}
+
+// Tether two bodies with a maximum separation
+ns_attach_rope :: extern fn(app: App, value parent: Entity, value child: Entity, max_distance: f32) -> bool
+attach_rope :: fn(app: App, parent: Entity, child: Entity, max_distance: f32) -> bool {
+    held := unsafe { ns_attach_rope(app, parent, child, max_distance) }
+    held
+}
+
+// Get a character controller's current velocity
+ns_controller_velocity :: extern fn(app: App, value entity: Entity) -> Vec3
+controller_velocity :: fn(app: App, entity: Entity) -> Vec3 {
+    held := unsafe { ns_controller_velocity(app, entity) }
+    held
+}
+
+// Move a character controller this frame with input and a jump flag
+ns_move_character :: extern fn(app: App, value entity: Entity, movement_x: f32, movement_y: f32, jump: bool)
+move_character :: fn(app: App, entity: Entity, movement_x: f32, movement_y: f32, jump: bool) {
+    unsafe { ns_move_character(app, entity, movement_x, movement_y, jump) }
+}
+
+// Request a precise GPU surface pick at a screen position
+ns_request_surface_pick :: extern fn(app: App, screen_pos_x: f32, screen_pos_y: f32)
+request_surface_pick :: fn(app: App, screen_pos_x: f32, screen_pos_y: f32) {
+    unsafe { ns_request_surface_pick(app, screen_pos_x, screen_pos_y) }
+}
+
+// Take the result of a requested surface pick, if ready
+ns_take_surface_pick :: extern fn(app: App) -> ^i8
+take_surface_pick :: fn(app: App) -> Text {
+    held := unsafe { ns_take_surface_pick(app) }
+    text_from(held)
+}
+
+// Check whether the pointer is over a world-panel button this frame
+ns_world_button_hovered :: extern fn(app: App, value button: Entity) -> bool
+world_button_hovered :: fn(app: App, button: Entity) -> bool {
+    held := unsafe { ns_world_button_hovered(app, button) }
+    held
+}
+
+// Register a sound from encoded audio file bytes
+ns_load_sound :: extern fn(app: App, name: ^i8, bytes: ^u8, bytes_len: i64)
+load_sound :: fn(app: App, name: str, bytes: []u8) {
+    name_held := c_string(name)
+    mut bytes_ptr := null_of($u8)
+    if (slice_len(bytes) > 0) {
+        bytes_ptr = ptr_to(bytes[0])
+    }
+    unsafe { ns_load_sound(app, ptr_cast($i8, name_held), bytes_ptr, slice_len(bytes)) }
+    heap_release($u8, name_held)
+}
+
+// Play a loaded sound once and return its voice entity
+ns_play_sound :: extern fn(app: App, name: ^i8) -> Entity
+play_sound :: fn(app: App, name: str) -> Entity {
+    name_held := c_string(name)
+    held := unsafe { ns_play_sound(app, ptr_cast($i8, name_held)) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Play a loaded sound on a loop and return its voice entity
+ns_play_sound_looping :: extern fn(app: App, name: ^i8) -> Entity
+play_sound_looping :: fn(app: App, name: str) -> Entity {
+    name_held := c_string(name)
+    held := unsafe { ns_play_sound_looping(app, ptr_cast($i8, name_held)) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Play a loaded sound once at a world position, attenuating with distance
+ns_play_sound_at :: extern fn(app: App, name: ^i8, position_x: f32, position_y: f32, position_z: f32) -> Entity
+play_sound_at :: fn(app: App, name: str, position_x: f32, position_y: f32, position_z: f32) -> Entity {
+    name_held := c_string(name)
+    held := unsafe { ns_play_sound_at(app, ptr_cast($i8, name_held), position_x, position_y, position_z) }
+    heap_release($u8, name_held)
+    held
+}
+
+// Set a playing sound's volume
+ns_set_volume :: extern fn(app: App, value entity: Entity, volume: f32)
+set_volume :: fn(app: App, entity: Entity, volume: f32) {
+    unsafe { ns_set_volume(app, entity, volume) }
+}
+
+// Stop a sound and free its voice
+ns_stop_sound :: extern fn(app: App, value entity: Entity)
+stop_sound :: fn(app: App, entity: Entity) {
+    unsafe { ns_stop_sound(app, entity) }
+}
+
+// Set a sound's pitch and speed multiplier
+ns_set_pitch :: extern fn(app: App, value entity: Entity, rate: f32)
+set_pitch :: fn(app: App, entity: Entity, rate: f32) {
+    unsafe { ns_set_pitch(app, entity, rate) }
+}
+
+// Set the distance range over which a spatial sound fades
+ns_set_spatial_distance :: extern fn(app: App, value entity: Entity, min: f32, max: f32)
+set_spatial_distance :: fn(app: App, entity: Entity, min: f32, max: f32) {
+    unsafe { ns_set_spatial_distance(app, entity, min, max) }
+}
+
+// Add a labeled checkbox to a panel
+ns_panel_checkbox :: extern fn(app: App, value panel: Entity, label: ^i8, initial: bool) -> Entity
+panel_checkbox :: fn(app: App, panel: Entity, label: str, initial: bool) -> Entity {
+    label_held := c_string(label)
+    held := unsafe { ns_panel_checkbox(app, panel, ptr_cast($i8, label_held), initial) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Get the checkbox's current on or off value
+ns_checkbox_value :: extern fn(app: App, value checkbox: Entity) -> bool
+checkbox_value :: fn(app: App, checkbox: Entity) -> bool {
+    held := unsafe { ns_checkbox_value(app, checkbox) }
+    held
+}
+
+// Add a slider from min to max starting at an initial value to a panel
+ns_panel_slider :: extern fn(app: App, value panel: Entity, min: f32, max: f32, initial: f32) -> Entity
+panel_slider :: fn(app: App, panel: Entity, min: f32, max: f32, initial: f32) -> Entity {
+    held := unsafe { ns_panel_slider(app, panel, min, max, initial) }
+    held
+}
+
+// Get the slider's current value
+ns_slider_value :: extern fn(app: App, value slider: Entity) -> f32
+slider_value :: fn(app: App, slider: Entity) -> f32 {
+    held := unsafe { ns_slider_value(app, slider) }
+    held
+}
+
+// Set the slider's value
+ns_set_slider_value :: extern fn(app: App, value slider: Entity, value: f32)
+set_slider_value :: fn(app: App, slider: Entity, value: f32) {
+    unsafe { ns_set_slider_value(app, slider, value) }
+}
+
+// Add a single-line text input with placeholder text to a panel
+ns_panel_text_input :: extern fn(app: App, value panel: Entity, placeholder: ^i8) -> Entity
+panel_text_input :: fn(app: App, panel: Entity, placeholder: str) -> Entity {
+    placeholder_held := c_string(placeholder)
+    held := unsafe { ns_panel_text_input(app, panel, ptr_cast($i8, placeholder_held)) }
+    heap_release($u8, placeholder_held)
+    held
+}
+
+// Get the input's new contents if it changed this frame
+ns_text_input_changed :: extern fn(app: App, value input: Entity) -> ^i8
+text_input_changed :: fn(app: App, input: Entity) -> Text {
+    held := unsafe { ns_text_input_changed(app, input) }
+    text_from(held)
+}
+
+// Add a dropdown of options with an initial selection to a panel
+ns_panel_dropdown :: extern fn(app: App, value panel: Entity, options: ^^i8, options_len: i64, initial: i64) -> Entity
+panel_dropdown :: fn(app: App, panel: Entity, options: []str, initial: i64) -> Entity {
+    options_held := c_strings(options)
+    held := unsafe { ns_panel_dropdown(app, panel, options_held.pointer, options_held.count, initial) }
+    c_strings_free(options_held)
+    held
+}
+
+// Get the newly chosen index if the dropdown changed this frame
+ns_dropdown_selected :: extern fn(app: App, value dropdown: Entity) -> ^i8
+dropdown_selected :: fn(app: App, dropdown: Entity) -> Text {
+    held := unsafe { ns_dropdown_selected(app, dropdown) }
+    text_from(held)
+}
+
+// Add a progress bar filled to an initial value to a panel
+ns_panel_progress_bar :: extern fn(app: App, value panel: Entity, initial: f32) -> Entity
+panel_progress_bar :: fn(app: App, panel: Entity, initial: f32) -> Entity {
+    held := unsafe { ns_panel_progress_bar(app, panel, initial) }
+    held
+}
+
+// Set a progress bar's fill from 0 to 1
+ns_set_progress :: extern fn(app: App, value bar: Entity, value: f32)
+set_progress :: fn(app: App, bar: Entity, value: f32) {
+    unsafe { ns_set_progress(app, bar, value) }
+}
+
+// Add an on or off toggle to a panel
+ns_panel_toggle :: extern fn(app: App, value panel: Entity, initial: bool) -> Entity
+panel_toggle :: fn(app: App, panel: Entity, initial: bool) -> Entity {
+    held := unsafe { ns_panel_toggle(app, panel, initial) }
+    held
+}
+
+// Get the toggle's current on or off value
+ns_toggle_value :: extern fn(app: App, value toggle: Entity) -> bool
+toggle_value :: fn(app: App, toggle: Entity) -> bool {
+    held := unsafe { ns_toggle_value(app, toggle) }
+    held
+}
+
+// Add a radio button to a panel as one option of a group
+ns_panel_radio :: extern fn(app: App, value panel: Entity, label: ^i8, group_id: u32, option_index: i64) -> Entity
+panel_radio :: fn(app: App, panel: Entity, label: str, group_id: u32, option_index: i64) -> Entity {
+    label_held := c_string(label)
+    held := unsafe { ns_panel_radio(app, panel, ptr_cast($i8, label_held), group_id, option_index) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Get the selected option index of a radio group, if any
+ns_radio_selected :: extern fn(app: App, group_id: u32) -> ^i8
+radio_selected :: fn(app: App, group_id: u32) -> Text {
+    held := unsafe { ns_radio_selected(app, group_id) }
+    text_from(held)
+}
+
+// Add a dual-handle range slider to a panel
+ns_panel_range_slider :: extern fn(app: App, value panel: Entity, min: f32, max: f32, low: f32, high: f32) -> Entity
+panel_range_slider :: fn(app: App, panel: Entity, min: f32, max: f32, low: f32, high: f32) -> Entity {
+    held := unsafe { ns_panel_range_slider(app, panel, min, max, low, high) }
+    held
+}
+
+// Set both handles of a range slider
+ns_set_range :: extern fn(app: App, value slider: Entity, low: f32, high: f32)
+set_range :: fn(app: App, slider: Entity, low: f32, high: f32) {
+    unsafe { ns_set_range(app, slider, low, high) }
+}
+
+// Add a tab bar of labels to a panel with an initial selection
+ns_panel_tabs :: extern fn(app: App, value panel: Entity, labels: ^^i8, labels_len: i64, initial: i64) -> Entity
+panel_tabs :: fn(app: App, panel: Entity, labels: []str, initial: i64) -> Entity {
+    labels_held := c_strings(labels)
+    held := unsafe { ns_panel_tabs(app, panel, labels_held.pointer, labels_held.count, initial) }
+    c_strings_free(labels_held)
+    held
+}
+
+// Select a tab bar's active tab by index
+ns_set_tab :: extern fn(app: App, value tabs: Entity, index: i64)
+set_tab :: fn(app: App, tabs: Entity, index: i64) {
+    unsafe { ns_set_tab(app, tabs, index) }
+}
+
+// Add a collapsing section to a panel and return its content container
+ns_panel_collapsing :: extern fn(app: App, value panel: Entity, label: ^i8, open: bool) -> Entity
+panel_collapsing :: fn(app: App, panel: Entity, label: str, open: bool) -> Entity {
+    label_held := c_string(label)
+    held := unsafe { ns_panel_collapsing(app, panel, ptr_cast($i8, label_held), open) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Add a color picker to a panel starting at a linear RGBA color
+ns_panel_color_picker :: extern fn(app: App, value panel: Entity, initial_x: f32, initial_y: f32, initial_z: f32, initial_w: f32) -> Entity
+panel_color_picker :: fn(app: App, panel: Entity, initial_x: f32, initial_y: f32, initial_z: f32, initial_w: f32) -> Entity {
+    held := unsafe { ns_panel_color_picker(app, panel, initial_x, initial_y, initial_z, initial_w) }
+    held
+}
+
+// Get the color picker's current color as linear RGBA
+ns_color_value :: extern fn(app: App, value picker: Entity) -> ^i8
+color_value :: fn(app: App, picker: Entity) -> Text {
+    held := unsafe { ns_color_value(app, picker) }
+    text_from(held)
+}
+
+// Add a multi-line text area with placeholder text to a panel
+ns_panel_text_area :: extern fn(app: App, value panel: Entity, placeholder: ^i8, rows: i64) -> Entity
+panel_text_area :: fn(app: App, panel: Entity, placeholder: str, rows: i64) -> Entity {
+    placeholder_held := c_string(placeholder)
+    held := unsafe { ns_panel_text_area(app, panel, ptr_cast($i8, placeholder_held), rows) }
+    heap_release($u8, placeholder_held)
+    held
+}
+
+// Add a multi-line text area pre-filled with an initial value to a panel
+ns_panel_text_area_with_value :: extern fn(app: App, value panel: Entity, placeholder: ^i8, rows: i64, initial: ^i8) -> Entity
+panel_text_area_with_value :: fn(app: App, panel: Entity, placeholder: str, rows: i64, initial: str) -> Entity {
+    placeholder_held := c_string(placeholder)
+    initial_held := c_string(initial)
+    held := unsafe { ns_panel_text_area_with_value(app, panel, ptr_cast($i8, placeholder_held), rows, ptr_cast($i8, initial_held)) }
+    heap_release($u8, placeholder_held)
+    heap_release($u8, initial_held)
+    held
+}
+
+// Replace a text area's contents
+ns_set_text_area :: extern fn(app: App, value area: Entity, text: ^i8)
+set_text_area :: fn(app: App, area: Entity, text: str) {
+    text_held := c_string(text)
+    unsafe { ns_set_text_area(app, area, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+}
+
+// Add a multi-select chip list of options to a panel
+ns_panel_multi_select :: extern fn(app: App, value panel: Entity, options: ^^i8, options_len: i64) -> Entity
+panel_multi_select :: fn(app: App, panel: Entity, options: []str) -> Entity {
+    options_held := c_strings(options)
+    held := unsafe { ns_panel_multi_select(app, panel, options_held.pointer, options_held.count) }
+    c_strings_free(options_held)
+    held
+}
+
+// Set a multi-select's chosen option indices
+ns_set_multi_select :: extern fn(app: App, value widget: Entity, indices: ^u32, indices_len: i64)
+set_multi_select :: fn(app: App, widget: Entity, indices: []u32) {
+    mut indices_ptr := null_of($u32)
+    if (slice_len(indices) > 0) {
+        indices_ptr = ptr_to(indices[0])
+    }
+    unsafe { ns_set_multi_select(app, widget, indices_ptr, slice_len(indices)) }
+}
+
+// Add a date picker starting at a given date to a panel
+ns_panel_date_picker :: extern fn(app: App, value panel: Entity, year: i32, month: u32, day: u32) -> Entity
+panel_date_picker :: fn(app: App, panel: Entity, year: i32, month: u32, day: u32) -> Entity {
+    held := unsafe { ns_panel_date_picker(app, panel, year, month, day) }
+    held
+}
+
+// Set a date picker's value
+ns_set_date :: extern fn(app: App, value picker: Entity, year: i32, month: u32, day: u32)
+set_date :: fn(app: App, picker: Entity, year: i32, month: u32, day: u32) {
+    unsafe { ns_set_date(app, picker, year, month, day) }
+}
+
+// Add a dropdown menu listing items to a panel
+ns_panel_menu :: extern fn(app: App, value panel: Entity, label: ^i8, items: ^^i8, items_len: i64) -> Entity
+panel_menu :: fn(app: App, panel: Entity, label: str, items: []str) -> Entity {
+    label_held := c_string(label)
+    items_held := c_strings(items)
+    held := unsafe { ns_panel_menu(app, panel, ptr_cast($i8, label_held), items_held.pointer, items_held.count) }
+    heap_release($u8, label_held)
+    c_strings_free(items_held)
+    held
+}
+
+// Add an HSV color picker starting at a linear RGBA color to a panel
+ns_panel_color_picker_hsv :: extern fn(app: App, value panel: Entity, initial_x: f32, initial_y: f32, initial_z: f32, initial_w: f32) -> Entity
+panel_color_picker_hsv :: fn(app: App, panel: Entity, initial_x: f32, initial_y: f32, initial_z: f32, initial_w: f32) -> Entity {
+    held := unsafe { ns_panel_color_picker_hsv(app, panel, initial_x, initial_y, initial_z, initial_w) }
+    held
+}
+
+// Add a draggable splitter dividing a panel into two resizable panes
+ns_panel_splitter :: extern fn(app: App, value panel: Entity, horizontal: bool, ratio: f32) -> Entity
+panel_splitter :: fn(app: App, panel: Entity, horizontal: bool, ratio: f32) -> Entity {
+    held := unsafe { ns_panel_splitter(app, panel, horizontal, ratio) }
+    held
+}
+
+// Add a breadcrumb trail of segments to a panel
+ns_panel_breadcrumb :: extern fn(app: App, value panel: Entity, segments: ^^i8, segments_len: i64) -> Entity
+panel_breadcrumb :: fn(app: App, panel: Entity, segments: []str) -> Entity {
+    segments_held := c_strings(segments)
+    held := unsafe { ns_panel_breadcrumb(app, panel, segments_held.pointer, segments_held.count) }
+    c_strings_free(segments_held)
+    held
+}
+
+// Add a virtual list that recycles a pool of rows to a panel
+ns_panel_virtual_list :: extern fn(app: App, value panel: Entity, item_height: f32, pool_size: i64) -> Entity
+panel_virtual_list :: fn(app: App, panel: Entity, item_height: f32, pool_size: i64) -> Entity {
+    held := unsafe { ns_panel_virtual_list(app, panel, item_height, pool_size) }
+    held
+}
+
+// Add a simple table with column headers and widths to a panel
+ns_panel_table :: extern fn(app: App, value panel: Entity, headers: ^^i8, headers_len: i64, widths: ^f32, widths_len: i64) -> Entity
+panel_table :: fn(app: App, panel: Entity, headers: []str, widths: []f32) -> Entity {
+    headers_held := c_strings(headers)
+    mut widths_ptr := null_of($f32)
+    if (slice_len(widths) > 0) {
+        widths_ptr = ptr_to(widths[0])
+    }
+    held := unsafe { ns_panel_table(app, panel, headers_held.pointer, headers_held.count, widths_ptr, slice_len(widths)) }
+    c_strings_free(headers_held)
+    held
+}
+
+// Add a sortable, selectable data grid to a panel
+ns_panel_data_grid :: extern fn(app: App, value panel: Entity, headers: ^^i8, headers_len: i64, widths: ^f32, widths_len: i64, pool_size: i64) -> Entity
+panel_data_grid :: fn(app: App, panel: Entity, headers: []str, widths: []f32, pool_size: i64) -> Entity {
+    headers_held := c_strings(headers)
+    mut widths_ptr := null_of($f32)
+    if (slice_len(widths) > 0) {
+        widths_ptr = ptr_to(widths[0])
+    }
+    held := unsafe { ns_panel_data_grid(app, panel, headers_held.pointer, headers_held.count, widths_ptr, slice_len(widths), pool_size) }
+    c_strings_free(headers_held)
+    held
+}
+
+// Set a data grid's total row count
+ns_set_data_grid_rows :: extern fn(app: App, value grid: Entity, count: i64)
+set_data_grid_rows :: fn(app: App, grid: Entity, count: i64) {
+    unsafe { ns_set_data_grid_rows(app, grid, count) }
+}
+
+// Set the text of a single data grid cell
+ns_set_data_grid_cell :: extern fn(app: App, value grid: Entity, row: i64, column: i64, text: ^i8)
+set_data_grid_cell :: fn(app: App, grid: Entity, row: i64, column: i64, text: str) {
+    text_held := c_string(text)
+    unsafe { ns_set_data_grid_cell(app, grid, row, column, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+}
+
+// Check whether the data grid's row selection changed this frame
+ns_data_grid_selection_changed :: extern fn(app: App, value grid: Entity) -> bool
+data_grid_selection_changed :: fn(app: App, grid: Entity) -> bool {
+    held := unsafe { ns_data_grid_selection_changed(app, grid) }
+    held
+}
+
+// Add a searchable command palette overlay to a panel
+ns_panel_command_palette :: extern fn(app: App, value panel: Entity, pool_size: i64) -> Entity
+panel_command_palette :: fn(app: App, panel: Entity, pool_size: i64) -> Entity {
+    held := unsafe { ns_panel_command_palette(app, panel, pool_size) }
+    held
+}
+
+// Add a two-column label and value property grid to a panel
+ns_panel_property_grid :: extern fn(app: App, value panel: Entity, label_width: f32) -> Entity
+panel_property_grid :: fn(app: App, panel: Entity, label_width: f32) -> Entity {
+    held := unsafe { ns_panel_property_grid(app, panel, label_width) }
+    held
+}
+
+// Add a labeled row to a property grid and return its value cell
+ns_panel_property_row :: extern fn(app: App, value grid: Entity, label: ^i8) -> Entity
+panel_property_row :: fn(app: App, grid: Entity, label: str) -> Entity {
+    label_held := c_string(label)
+    held := unsafe { ns_panel_property_row(app, grid, ptr_cast($i8, label_held)) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Add a tree view to a panel
+ns_panel_tree_view :: extern fn(app: App, value panel: Entity, multi_select: bool) -> Entity
+panel_tree_view :: fn(app: App, panel: Entity, multi_select: bool) -> Entity {
+    held := unsafe { ns_panel_tree_view(app, panel, multi_select) }
+    held
+}
+
+// Get the root container of a tree view for adding top-level nodes
+ns_tree_content :: extern fn(app: App, value tree_view: Entity) -> Entity
+tree_content :: fn(app: App, tree_view: Entity) -> Entity {
+    held := unsafe { ns_tree_content(app, tree_view) }
+    held
+}
+
+// Add a node at a depth under a container in a tree view
+ns_tree_node :: extern fn(app: App, value tree_view: Entity, value parent_container: Entity, label: ^i8, depth: i64, user_data: u64) -> Entity
+tree_node :: fn(app: App, tree_view: Entity, parent_container: Entity, label: str, depth: i64, user_data: u64) -> Entity {
+    label_held := c_string(label)
+    held := unsafe { ns_tree_node(app, tree_view, parent_container, ptr_cast($i8, label_held), depth, user_data) }
+    heap_release($u8, label_held)
+    held
+}
+
+// Get the container a node's children go into for nesting
+ns_tree_node_children :: extern fn(app: App, value node: Entity) -> Entity
+tree_node_children :: fn(app: App, node: Entity) -> Entity {
+    held := unsafe { ns_tree_node_children(app, node) }
+    held
+}
+
+// Expand or collapse a tree node
+ns_set_tree_node_expanded :: extern fn(app: App, value node: Entity, expanded: bool)
+set_tree_node_expanded :: fn(app: App, node: Entity, expanded: bool) {
+    unsafe { ns_set_tree_node_expanded(app, node, expanded) }
+}
+
+// Get the entities of the currently selected tree nodes
+ns_tree_view_selected :: extern fn(app: App, value tree_view: Entity, out_len: ^i64) -> ^Entity
+tree_view_selected :: fn(app: App, tree_view: Entity) -> Entities {
+    mut out_len : i64 = 0
+    held := unsafe { ns_tree_view_selected(app, tree_view, ptr_to(out_len)) }
+    entities_from(held, out_len)
+}
+
+// Add a numeric drag value field that scrubs as you drag to a panel
+ns_panel_drag_value :: extern fn(app: App, value panel: Entity, min: f32, max: f32, initial: f32) -> Entity
+panel_drag_value :: fn(app: App, panel: Entity, min: f32, max: f32, initial: f32) -> Entity {
+    held := unsafe { ns_panel_drag_value(app, panel, min, max, initial) }
+    held
+}
+
+// Get the drag value's current value
+ns_drag_value :: extern fn(app: App, value widget: Entity) -> f32
+drag_value :: fn(app: App, widget: Entity) -> f32 {
+    held := unsafe { ns_drag_value(app, widget) }
+    held
+}
+
+// Add a selectable label to a panel
+ns_panel_selectable :: extern fn(app: App, value panel: Entity, text: ^i8, group: u32, grouped: bool) -> Entity
+panel_selectable :: fn(app: App, panel: Entity, text: str, group: u32, grouped: bool) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_panel_selectable(app, panel, ptr_cast($i8, text_held), group, grouped) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Add a centered modal dialog to a panel and return its content container
+ns_panel_modal :: extern fn(app: App, value panel: Entity, title: ^i8, width: f32, height: f32) -> Entity
+panel_modal :: fn(app: App, panel: Entity, title: str, width: f32, height: f32) -> Entity {
+    title_held := c_string(title)
+    held := unsafe { ns_panel_modal(app, panel, ptr_cast($i8, title_held), width, height) }
+    heap_release($u8, title_held)
+    held
+}
+
+// Add an animated loading spinner to a panel
+ns_panel_spinner :: extern fn(app: App, value panel: Entity) -> Entity
+panel_spinner :: fn(app: App, panel: Entity) -> Entity {
+    held := unsafe { ns_panel_spinner(app, panel) }
+    held
+}
+
+// Add a thin horizontal divider line to a panel
+ns_panel_separator :: extern fn(app: App, value panel: Entity) -> Entity
+panel_separator :: fn(app: App, panel: Entity) -> Entity {
+    held := unsafe { ns_panel_separator(app, panel) }
+    held
+}
+
+// Add a larger heading-styled line of text to a panel
+ns_panel_heading :: extern fn(app: App, value panel: Entity, text: ^i8) -> Entity
+panel_heading :: fn(app: App, panel: Entity, text: str) -> Entity {
+    text_held := c_string(text)
+    held := unsafe { ns_panel_heading(app, panel, ptr_cast($i8, text_held)) }
+    heap_release($u8, text_held)
+    held
+}
+
+// Serialize the scene and write it to a file path (native only)
+ns_save_scene_to_file :: extern fn(app: App, path: ^i8) -> bool
+save_scene_to_file :: fn(app: App, path: str) -> bool {
+    path_held := c_string(path)
+    held := unsafe { ns_save_scene_to_file(app, ptr_cast($i8, path_held)) }
+    heap_release($u8, path_held)
+    held
+}
+
+// Read a scene file from a path and spawn it, replying its root entities (native only)
+ns_load_scene_from_file :: extern fn(app: App, path: ^i8, out_len: ^i64) -> ^Entity
+load_scene_from_file :: fn(app: App, path: str) -> Entities {
+    path_held := c_string(path)
+    mut out_len : i64 = 0
+    held := unsafe { ns_load_scene_from_file(app, ptr_cast($i8, path_held), ptr_to(out_len)) }
+    heap_release($u8, path_held)
+    entities_from(held, out_len)
+}
+
