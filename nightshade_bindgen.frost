@@ -691,14 +691,9 @@ emit_wire :: fn(mut out: Builder, mut names: Builder, base: ^u8,
 // handed back becomes a resource the compiler counts.
 // ---------------------------------------------------------------------------
 
-// The letter a vector's nth component is spelled with, which is what the C
+// The letters a vector's components are spelled with, which is what the C
 // signature names each of the floats a position or a color spreads into.
-component_suffix :: fn(index: i64) -> i64 {
-    if (index == 0) { return 120 }
-    if (index == 1) { return 121 }
-    if (index == 2) { return 122 }
-    119
-}
+VECTOR_COMPONENTS :: "xyzw"
 
 append_components :: fn(mut out: Builder, name: str, count: i64, typed: bool) {
     mut index : i64 = 0
@@ -706,7 +701,7 @@ append_components :: fn(mut out: Builder, name: str, count: i64, typed: bool) {
         builder_str_value(out, ", ")
         builder_str_value(out, name)
         builder_byte(out, 95)
-        builder_byte(out, component_suffix(index))
+        builder_byte(out, VECTOR_COMPONENTS[index])
         if (typed) {
             builder_str_value(out, ": f32")
         }
